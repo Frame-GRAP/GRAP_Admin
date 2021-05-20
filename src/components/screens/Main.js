@@ -1,15 +1,5 @@
 import React, {useEffect, useState} from "react";
 import './Main.css';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper, TableFooter, TablePagination,
-} from "@material-ui/core";
-import Game from './Game';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 
