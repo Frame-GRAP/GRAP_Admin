@@ -8,7 +8,7 @@ const initialValues = {
     description: "",
     developer: "",
     publisher: "",
-    releasedDate: new Date(),
+    releaseDate: new Date(),
     downloadUrl: "",
     img:[]
 }
@@ -102,9 +102,9 @@ function GameForm(props) {
                         error={errors.downloadUrl}
                     />
                     <Controller.DatePicker
-                        name="releasedDate"
-                        label="ReleasedDate"
-                        value={values.releasedDate}
+                        name="releaseDate"
+                        label="ReleaseDate"
+                        value={values.releaseDate}
                         onChange={handleInputChange}
                     />
                 </Grid>

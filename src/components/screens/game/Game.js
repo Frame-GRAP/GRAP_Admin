@@ -17,7 +17,9 @@ import axios from "axios";
 import GameForm from "./GameForm";
 import Controller from "../../controls/Controller";
 import Popup from "../../controls/Popup";
-import {insertGame} from "../../Service";
+import {deleteGame, insertGame} from "../../Service";
+import Notification from "../../controls/Notification";
+import ConfirmDialog from "../../controls/ConfirmDialog";
 
 const useStyles = makeStyles(theme => ({
     searchInput:{
@@ -37,7 +39,10 @@ function Game(){
 
     const [openPopup, setOpenPopup] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [filterFn, setFilterFn] = useState({ fn: games => { return games; } })
+    const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
+    const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
+    const [records, setRecords] = useState();
 
     const classes = useStyles();
 
@@ -67,20 +72,38 @@ function Game(){
     const handleSearch = e => {
         let target = e.target;
         setFilterFn({
-            fn: items => {
+            fn: games => {
                 if(target.value == "")
-                    return items;
+                    return games;
                 else
-                    return items.filter(x => x.name.includes(target.value))
+                    return games.filter(x => x.name.includes(target.value))
             }
         })
     }
 
-    const addOrEdit = (game, resetForm) => {
+    const recordsAfterPagingAndSorting = () => {
+        return filterFn.fn(gameData).slice(gamePage * rowsPerPage, (gamePage + 1) * rowsPerPage);
+    }
+
+    /*const addOrEdit = (game, resetForm) => {
         insertGame(game);
         resetForm();
         setRecordForEdit(null);
         setOpenPopup(false);
+    }*/
+
+
+    const addOrEdit = (game, resetForm) => {
+        insertGame(game);
+        resetForm()
+        setRecordForEdit(null)
+        setOpenPopup(false)
+        ///setRecords(employeeService.getAllEmployees())
+        setNotify({
+            isOpen: true,
+            message: 'Submitted Successfully',
+            type: 'success'
+        })
     }
 
     const openInPopup = (game) => {
@@ -88,19 +111,19 @@ function Game(){
         setOpenPopup(true);
     }
 
-    /*const onDelete = id => {
+    const onDelete = id => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        employeeService.deleteEmployee(id);
-        setRecords(employeeService.getAllEmployees())
+        deleteGame(id);
+        ///setRecords(employeeService.getAllEmployees())
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
             type: 'error'
         })
-    }*/
+    }
 
 
     return (
@@ -117,7 +140,7 @@ function Game(){
                             startAdornment:(<InputAdornment position="start">
                             </InputAdornment>)
                         }}
-                        onChange={{handleSearch}}
+                        onChange={handleSearch}
                     />
                     <Controller.Button
                         className={classes.newButton}
@@ -136,9 +159,10 @@ function Game(){
                                 <TableCell>image</TableCell>
                                 <TableCell>description</TableCell>
                                 <TableCell>publisher</TableCell>
-                                <TableCell>releasedDate</TableCell>
+                                <TableCell>releaseDate</TableCell>
                                 <TableCell>downloadUrl</TableCell>
                                 <TableCell>lastVideoCrawled</TableCell>
+                                <TableCell>VoteCount</TableCell>
                                 <TableCell>actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -155,16 +179,29 @@ function Game(){
                                         <TableCell className="game_cell"><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
                                         <TableCell className="game_cell">{truncate(game?.description, 150)}</TableCell>
                                         <TableCell className="game_cell">{game.publisher}</TableCell>
-                                        <TableCell className="game_cell">{game.releasedData}</TableCell>
+                                        <TableCell className="game_cell">{game.releaseData}</TableCell>
                                         <TableCell className="game_cell">{game.downloadUrl}</TableCell>
                                         <TableCell className="game_cell">{game.lastVideoCrawled}</TableCell>
+                                        <TableCell className="game_cell">{game.vote_count}</TableCell>
                                         <TableCell className="game_cell">
                                             <Controller.Button
                                                 text="Edit"
                                                 color="primary"
                                                 size="small"
                                                 onClick={() => {openInPopup(game)}}/>
-                                            <Controller.Button text="Delete" color="primary" size="small"/>
+                                            <Controller.Button
+                                                text="Delete"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setConfirmDialog({
+                                                        isOpen: true,
+                                                        title:'정말 지우시겠습니까?',
+                                                        subTitle:"되돌릴 수 없습니다.",
+                                                        onConfirm: () => {onDelete(game.id)}
+                                                    })
+                                                }}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -192,6 +229,14 @@ function Game(){
                         addOrEdit={addOrEdit}
                     />
                 </Popup>
+                <Notification
+                    notify={notify}
+                    setNotify={setNotify}
+                />
+                <ConfirmDialog
+                    confirmDialog={confirmDialog}
+                    setConfirmDialog={setConfirmDialog}
+                />
             </div>
         </div>
     );
