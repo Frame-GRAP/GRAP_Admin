@@ -1,18 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import './Game.css'
+import './game/Game.css'
 import {
-    Modal,
-    Table, TableBody, TableContainer, TableFooter,
-    TableHead, TablePagination,
+    Modal, Table, TableBody, TableContainer, TableFooter,
+    TableHead, TablePagination,TableCell, TableRow,
     TextField,
 } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from "axios";
 import './Video.css';
-import ReactPlayer from "react-player";
-
 
 function Video(){
     const [page, setPage] = useState(0);
@@ -64,34 +59,23 @@ function Video(){
         setGameId(value.id)
     }
 
-
-
     const getVideo = (platform, urlKey) => {
         let player_Url;
-        if(platform === "twitch"){
-            player_Url = `https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost`
-            return(
-                <iframe
-                    className="game__video"
-                    src={player_Url}
-                    scrolling="no"
-                    height="400px"
-                    width="600px"
-                    frameBorder="0"
-                    // allowfullscreen="true"
-                />
-            )
-        }else if(platform === "youtube"){
-            player_Url = `https://www.youtube.com/watch?v=${urlKey}`
-            return (
-                <ReactPlayer
-                    className="game__video"
-                    url={player_Url}
-                    width='600px' height='400px'
-                    playing={false}
-                />
-            )
+        if(videoData.platform === "twitch"){
+            player_Url = `https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost&autoplay=true&origin=http://localhost:3000`
+        }else if(videoData.platform === "youtube"){
+            player_Url = `https://www.youtube.com/embed/${urlKey}?autoplay=1&mute=0`
         }
+
+        return (
+            <iframe
+                className="row_video"
+                width="95%" height="95%"
+                src={player_Url}
+                scrolling="no"
+                frameBorder="0"
+                allow="autoplay"/>
+        )
     }
 
     return (

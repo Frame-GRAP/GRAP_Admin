@@ -1,12 +1,12 @@
 import {useState} from 'react';
 import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/Sidebar";
-import Main from "./components/Screens/Main";
+import Main from "./components/screens/Main";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import Game from "./components/Screens/Game";
-import GameScreen from "./components/Screens/GameScreen";
-import VideoScreen from "./components/Screens/VideoScreen";
-import HomeScreen from "./components/Screens/HomeScreen";
+import Game from "./components/screens/game/Game";
+import GameScreen from "./components/screens/game/GameScreen";
+import VideoScreen from "./components/screens/VideoScreen";
+import HomeScreen from "./components/screens/HomeScreen";
 
 function App() {
     const [sidebarOpen, setsidebarOpen] = useState(false);

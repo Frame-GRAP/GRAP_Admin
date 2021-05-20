@@ -1,12 +1,9 @@
 import React, {useState} from "react";
 import Navbar from "../navbar/Navbar";
-import Main from "./Main";
 import Sidebar from "../sidebar/Sidebar";
-import Game from "./Game";
-import "../../index.css";
+import Main from "./Main";
 
-function GameScreen() {
-
+function HomeScreen() {
     const [sidebarOpen, setsidebarOpen] = useState(false);
 
     const openSidebar = () => {
@@ -17,12 +14,12 @@ function GameScreen() {
     };
 
     return (
-        <div className="game_screen">
+        <div className="home_screen">
             <Navbar sidebarOpen={sidebarOpen} openSidebar={openSidebar} />
-            <Game />
+            <Main />
             <Sidebar sidebarOpen={sidebarOpen} closeSidebar={closeSidebar} />
         </div>
     )
 }
 
-export default GameScreen;
+export default HomeScreen;
