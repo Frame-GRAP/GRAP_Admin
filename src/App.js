@@ -5,7 +5,7 @@ import Main from "./components/screens/Main";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import Game from "./components/screens/game/Game";
 import GameScreen from "./components/screens/game/GameScreen";
-import VideoScreen from "./components/screens/VideoScreen";
+import VideoScreen from "./components/screens/video/VideoScreen";
 import HomeScreen from "./components/screens/HomeScreen";
 
 function App() {

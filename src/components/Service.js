@@ -1,10 +1,6 @@
 import axios from "axios";
 
-export function refresh(){
-    const request = axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
-}
-
-export function insertGame(data) {
+export async function insertGame(data) {
     const dto = new Object();
     dto.name = data.name;
     dto.description = data.description;
@@ -19,7 +15,7 @@ export function insertGame(data) {
 
     const gamePostUrl = "http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game"
 
-    axios({
+    await axios({
         method: "post",
         url: gamePostUrl,
         data: formData,
@@ -27,46 +23,66 @@ export function insertGame(data) {
     }).then((res)=>{
         console.log(res);
     })
-
 }
 
-
-export function updateGame(data) {
+export async function updateGame(game) {
+    const gameUpdateUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${game.id}`;
     const dto = new Object();
-    dto.name = data.name;
-    dto.description = data.description;
-    dto.developer = data.developer;
-    dto.publisher = data.publisher;
-    dto.releaseDate = data.releaseDate;
-    dto.downloadUrl = data.downloadUrl;
+    //dto.id = game.id;
+    dto.name = game.name;
+    dto.description = game.description;
+    //dto.developer = game.developer;
+    //dto.publisher = game.publisher;
+    //dto.releaseDate = game.releaseDate;
+    //dto.headerImg = game.headerImg;
+    dto.downloadUrl = game.downloadUrl;
+    //dto.lastVideoCrawled = game.lastVideoCrawled;
+    //dto.videosId = game.videosId;
 
-    const formData = new FormData();
-    formData.append("img", data.img[0]);
-    formData.append("dto", new Blob([JSON.stringify(dto)], {type: "application/json"}));
+    const json = JSON.stringify(dto);
 
-    const gamePostUrl = "http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game"
-
-    axios({
-        method: "post",
-        url: gamePostUrl,
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" }
-    }).then((res)=>{
+    await axios({
+        method: "put",
+        url: gameUpdateUrl,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        data: json,
+    }).then((res) => {
         console.log(res);
     })
-
 }
 
-export function deleteGame(data) {
-    const gamePostUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${data}`;
+export async function deleteGame(gameId) {
+    const gamePostUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}`;
 
-    console.log(data);
-    /*
-    axios({
+    await axios({
         method: "delete",
         url: gamePostUrl,
     }).then((res)=>{
         console.log(res);
-    })*/
+    })
 
+}
+
+export async function deleteVideo(videoId, gameId) {
+    const videoDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
+
+    await axios({
+        method: "delete",
+        url: videoDeleteUrl,
+    }).then((res)=>{
+        console.log(res);
+    })
+}
+
+export async function registerVideo(videoId, gameId) {
+    const videoRegisterUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
+
+    await axios({
+        method: "post",
+        url: videoRegisterUrl
+    }).then((res)=>{
+        console.log(res.data);
+    })
 }
