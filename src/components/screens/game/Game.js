@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import './Game.css'
 import {
+    Box,
+    Collapse,
     InputAdornment, makeStyles,
     Paper,
     Table,
@@ -11,7 +13,7 @@ import {
     TableFooter,
     TableHead,
     TablePagination,
-    Toolbar
+    Toolbar, Typography
 } from "@material-ui/core";
 import axios from "axios";
 import GameForm from "./GameForm";
@@ -20,6 +22,7 @@ import Popup from "../../controls/Popup";
 import {deleteGame, insertGame} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
+import GameRow from "./GameRow";
 
 const useStyles = makeStyles(theme => ({
     searchInput:{
@@ -42,7 +45,9 @@ function Game(){
     const [filterFn, setFilterFn] = useState({ fn: games => { return games; } })
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
-    const [records, setRecords] = useState();
+    const [more, setMore] = useState(false);
+    const searchRef = useRef();
+    const [loading, setLoading] = useState(true);
 
     const classes = useStyles();
 
@@ -55,10 +60,6 @@ function Game(){
         setGamePage(0);
     };
 
-    function truncate(string, n){
-        return string?.length > n ? string.substr(0, n - 1) + '...' : string;
-    }
-
     useEffect(()=> {
         async function fetchData() {
             const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
@@ -67,6 +68,10 @@ function Game(){
             return request;
         }
         fetchData();
+        setLoading(false);
+        return () => {
+            setLoading(true);
+        }
     }, []);
 
     const handleSearch = e => {
@@ -76,7 +81,7 @@ function Game(){
                 if(target.value == "")
                     return games;
                 else
-                    return games.filter(x => x.name.includes(target.value))
+                    return games.filter(x => x.name.toLowerCase().includes(target.value))
             }
         })
     }
@@ -92,13 +97,34 @@ function Game(){
         setOpenPopup(false);
     }*/
 
+    async function refreshGame() {
+        const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
+
+        setGameData(request.data);
+        return request;
+    }
 
     const addOrEdit = (game, resetForm) => {
         insertGame(game);
         resetForm()
+        setRecordForEdit(null);
+        setOpenPopup(false);
+        setLoading(true);
+        refreshGame().then(r => {setLoading(false);})
+        setNotify({
+            isOpen: true,
+            message: 'Submitted Successfully',
+            type: 'success'
+        })
+    }
+
+    const editGame = (game, resetForm) => {
+        insertGame(game);
+        resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)
-        ///setRecords(employeeService.getAllEmployees())
+        setLoading(true);
+        refreshGame().then(r => {setLoading(false);})
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -117,7 +143,10 @@ function Game(){
             isOpen: false
         })
         deleteGame(id);
-        ///setRecords(employeeService.getAllEmployees())
+        setLoading(true);
+        refreshGame().then(r => {setLoading(false)})
+        setMore(false);
+        searchRef.current = "";
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
@@ -125,7 +154,7 @@ function Game(){
         })
     }
 
-
+    if(loading) return (<div>Loading...</div>);
     return (
         <div className="game_container">
             <div className="game_title">
@@ -141,6 +170,7 @@ function Game(){
                             </InputAdornment>)
                         }}
                         onChange={handleSearch}
+                        inputRef={searchRef}
                     />
                     <Controller.Button
                         className={classes.newButton}
@@ -157,53 +187,23 @@ function Game(){
                                 <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
                                 <TableCell>image</TableCell>
-                                <TableCell>description</TableCell>
                                 <TableCell>publisher</TableCell>
                                 <TableCell>releaseDate</TableCell>
-                                <TableCell>downloadUrl</TableCell>
-                                <TableCell>lastVideoCrawled</TableCell>
-                                <TableCell>VoteCount</TableCell>
                                 <TableCell>actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {gameData
-                                .slice(gamePage * rowsPerPage, (gamePage + 1) * rowsPerPage)
+                            {recordsAfterPagingAndSorting()
                                 .map((game, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell component="th" scope="row">
-                                            {gamePage * rowsPerPage + index + 1}
-                                        </TableCell>
-                                        <TableCell className="game_cell">{game.id}</TableCell>
-                                        <TableCell className="game_cell">{game.name}</TableCell>
-                                        <TableCell className="game_cell"><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
-                                        <TableCell className="game_cell">{truncate(game?.description, 150)}</TableCell>
-                                        <TableCell className="game_cell">{game.publisher}</TableCell>
-                                        <TableCell className="game_cell">{game.releaseData}</TableCell>
-                                        <TableCell className="game_cell">{game.downloadUrl}</TableCell>
-                                        <TableCell className="game_cell">{game.lastVideoCrawled}</TableCell>
-                                        <TableCell className="game_cell">{game.vote_count}</TableCell>
-                                        <TableCell className="game_cell">
-                                            <Controller.Button
-                                                text="Edit"
-                                                color="primary"
-                                                size="small"
-                                                onClick={() => {openInPopup(game)}}/>
-                                            <Controller.Button
-                                                text="Delete"
-                                                color="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    setConfirmDialog({
-                                                        isOpen: true,
-                                                        title:'정말 지우시겠습니까?',
-                                                        subTitle:"되돌릴 수 없습니다.",
-                                                        onConfirm: () => {onDelete(game.id)}
-                                                    })
-                                                }}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
+                                    <GameRow
+                                        key={index}
+                                        index={index}
+                                        game={game}
+                                        gamePage={gamePage}
+                                        rowsPerPage={rowsPerPage}
+                                        openInPopup={openInPopup}
+                                        setConfirmDialog={setConfirmDialog}
+                                        onDelete={onDelete}/>
                                 ))}
                         </TableBody>
                         <TableFooter>

@@ -66,13 +66,14 @@ function GameForm(props) {
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
+                    {!recordForEdit &&
                     <Controller.Input
                         name="name"
                         label="Name"
                         value={values.name}
                         onChange={handleInputChange}
                         error={errors.name}
-                    />
+                    />}
                     <Controller.Input
                         name="description"
                         label="Description"
@@ -80,6 +81,7 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.description}
                     />
+                    {!recordForEdit &&
                     <Controller.Input
                         name="developer"
                         label="Developer"
@@ -87,6 +89,8 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.developer}
                     />
+                    }
+                    {!recordForEdit &&
                     <Controller.Input
                         name="publisher"
                         label="Publisher"
@@ -94,6 +98,7 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.publisher}
                     />
+                    }
                     <Controller.Input
                         name="downloadUrl"
                         label="DownloadUrl"
@@ -101,14 +106,17 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.downloadUrl}
                     />
+                    {!recordForEdit &&
                     <Controller.DatePicker
                         name="releaseDate"
                         label="ReleaseDate"
                         value={values.releaseDate}
                         onChange={handleInputChange}
                     />
+                    }
                 </Grid>
                 <Grid item xs={6}>
+                    {!recordForEdit &&
                     <Controller.Image
                         name="img"
                         label="Img"
@@ -116,17 +124,18 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.img}
                     />
+                    }
+                    <div>
+                        <Controller.Button
+                            text="Submit"
+                            onClick={handleSubmit}
+                        />
+                        <Controller.Button
+                            text="Reset"
+                            color="default"
+                            onClick={resetForm} />
+                    </div>
                 </Grid>
-                <div>
-                    <Controller.Button
-                        text="Submit"
-                        onClick={handleSubmit}
-                    />
-                    <Controller.Button
-                        text="Reset"
-                        color="default"
-                        onClick={resetForm} />
-                </div>
             </Grid>
         </Form>
     )

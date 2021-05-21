@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import Navbar from "../navbar/Navbar";
-import Main from "./Main";
-import Sidebar from "../sidebar/Sidebar";
+import Navbar from "../../navbar/Navbar";
+import Main from "../Main";
+import Sidebar from "../../sidebar/Sidebar";
 import Video from './Video';
-import "../../App.css";
+import "../../../App.css";
 
 function VideoScreen() {
     const [sidebarOpen, setsidebarOpen] = useState(false);
