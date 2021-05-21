@@ -14,7 +14,7 @@ const initialValues = {
 }
 
 function GameForm(props) {
-    const { addOrEdit, recordForEdit } = props
+    const { addOrEdit, recordForEdit, editGame } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -66,14 +66,13 @@ function GameForm(props) {
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
-                    {!recordForEdit &&
                     <Controller.Input
                         name="name"
                         label="Name"
                         value={values.name}
                         onChange={handleInputChange}
                         error={errors.name}
-                    />}
+                    />
                     <Controller.Input
                         name="description"
                         label="Description"

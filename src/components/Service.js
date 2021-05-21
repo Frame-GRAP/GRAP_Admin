@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function insertGame(data) {
+export async function insertGame(data) {
     const dto = new Object();
     dto.name = data.name;
     dto.description = data.description;
@@ -15,7 +15,7 @@ export function insertGame(data) {
 
     const gamePostUrl = "http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game"
 
-    axios({
+    await axios({
         method: "post",
         url: gamePostUrl,
         data: formData,
@@ -25,24 +25,38 @@ export function insertGame(data) {
     })
 }
 
+export async function updateGame(game) {
+    const gameUpdateUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${game.id}`;
+    const dto = new Object();
+    //dto.id = game.id;
+    dto.name = game.name;
+    dto.description = game.description;
+    //dto.developer = game.developer;
+    //dto.publisher = game.publisher;
+    //dto.releaseDate = game.releaseDate;
+    //dto.headerImg = game.headerImg;
+    dto.downloadUrl = game.downloadUrl;
+    //dto.lastVideoCrawled = game.lastVideoCrawled;
+    //dto.videosId = game.videosId;
 
-export function updateGame(data) {
+    const json = JSON.stringify(dto);
 
-    const gameUpdateUrl = "http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game"
-
-    axios({
-        method: "post",
+    await axios({
+        method: "put",
         url: gameUpdateUrl,
-    }).then((res)=>{
+        headers:{
+            "Content-Type": "application/json"
+        },
+        data: json,
+    }).then((res) => {
         console.log(res);
     })
-
 }
 
-export function deleteGame(gameId) {
+export async function deleteGame(gameId) {
     const gamePostUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}`;
 
-    axios({
+    await axios({
         method: "delete",
         url: gamePostUrl,
     }).then((res)=>{
@@ -51,10 +65,10 @@ export function deleteGame(gameId) {
 
 }
 
-export function deleteVideo(videoId, gameId) {
+export async function deleteVideo(videoId, gameId) {
     const videoDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
 
-    axios({
+    await axios({
         method: "delete",
         url: videoDeleteUrl,
     }).then((res)=>{
@@ -62,10 +76,10 @@ export function deleteVideo(videoId, gameId) {
     })
 }
 
-export function registerVideo(videoId, gameId, check) {
+export async function registerVideo(videoId, gameId) {
     const videoRegisterUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
 
-    axios({
+    await axios({
         method: "post",
         url: videoRegisterUrl
     }).then((res)=>{

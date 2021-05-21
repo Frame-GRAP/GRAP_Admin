@@ -129,15 +129,15 @@ function Video(){
             ...confirmDialog,
             isOpen: false
         })
-        deleteVideo(id, gameId);
-        ///setRecords(employeeService.getAllEmployees())
-        setLoading(true);
-        refreshVideo().then(r => {setLoading(false);})
-        setNotify({
-            isOpen: true,
-            message: 'Deleted Successfully',
-            type: 'error'
-        })
+        deleteVideo(id, gameId).then(r => {
+            refreshVideo().then(r => {setLoading(false);})
+            setNotify({
+                isOpen: true,
+                message: 'Deleted Successfully',
+                type: 'error'
+            })
+            window.location.reload(false);
+        });
     }
 
     const onRegister = (videoId, gameId) => {
@@ -145,30 +145,14 @@ function Video(){
             ...confirmDialog,
             isOpen: false
         })
-        registerVideo(videoId, gameId, true);
-        setLoading(true);
-        refreshVideo().then(r => {setLoading(false);})
-        setMore(false);
-        setNotify({
-            isOpen: true,
-            message: 'Register Successfully',
-            type: 'success'
-        })
-    }
-
-    const onUnRegister = (videoId, gameId) => {
-        setConfirmDialog({
-            ...confirmDialog,
-            isOpen: false
-        });
-        registerVideo(videoId, gameId, false);
-        ///setRecords(employeeService.getAllEmployees())
-        setLoading(true);
-        refreshVideo().then(r => {setLoading(false);});
-        setNotify({
-            isOpen: true,
-            message: 'UnRegister Successfully',
-            type: 'error'
+        registerVideo(videoId, gameId).then(r => {
+            refreshVideo().then(r => {setLoading(false);})
+            setNotify({
+                isOpen: true,
+                message: 'Register Successfully',
+                type: 'success'
+            });
+            window.location.reload(false);
         })
     }
 
@@ -218,7 +202,6 @@ function Video(){
                                     setConfirmDialog={setConfirmDialog}
                                     onDelete={onDelete}
                                     onRegister={onRegister}
-                                    onUnRegister={onUnRegister}
                                     gameId={gameId}
                                 />
                             ))}

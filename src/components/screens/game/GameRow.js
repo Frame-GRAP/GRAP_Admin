@@ -11,7 +11,6 @@ export default function GameRow(props) {
 
     useEffect(() => {
         setReleaseDate(game.releaseDate);
-
     }, [game]);
 
 

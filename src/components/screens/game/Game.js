@@ -19,7 +19,7 @@ import axios from "axios";
 import GameForm from "./GameForm";
 import Controller from "../../controls/Controller";
 import Popup from "../../controls/Popup";
-import {deleteGame, insertGame} from "../../Service";
+import {deleteGame, insertGame, updateGame} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
 import GameRow from "./GameRow";
@@ -100,36 +100,36 @@ function Game(){
     async function refreshGame() {
         const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
 
+        setRecordForEdit(request.data);
         setGameData(request.data);
         return request;
     }
 
-    const addOrEdit = (game, resetForm) => {
-        insertGame(game);
-        resetForm()
-        setRecordForEdit(null);
-        setOpenPopup(false);
-        setLoading(true);
-        refreshGame().then(r => {setLoading(false);})
-        setNotify({
-            isOpen: true,
-            message: 'Submitted Successfully',
-            type: 'success'
-        })
-    }
+    const addOrEdit = (data, resetForm) => {
+        if(data.img == undefined){//edit
+            updateGame(data).then(r => {
+                resetForm()
+                setNotify({
+                    isOpen: true,
+                    message: 'Submitted Successfully',
+                    type: 'success'
+                })
+                window.location.reload(false);
+            });
+        }
 
-    const editGame = (game, resetForm) => {
-        insertGame(game);
-        resetForm()
-        setRecordForEdit(null)
-        setOpenPopup(false)
-        setLoading(true);
-        refreshGame().then(r => {setLoading(false);})
-        setNotify({
-            isOpen: true,
-            message: 'Submitted Successfully',
-            type: 'success'
-        })
+        else { //insert
+            console.log("insert");
+            insertGame(data).then(r => {
+                resetForm()
+                setNotify({
+                    isOpen: true,
+                    message: 'Submitted Successfully',
+                    type: 'success'
+                })
+            });
+            window.location.reload(false);
+        }
     }
 
     const openInPopup = (game) => {
@@ -142,16 +142,14 @@ function Game(){
             ...confirmDialog,
             isOpen: false
         })
-        deleteGame(id);
-        setLoading(true);
-        refreshGame().then(r => {setLoading(false)})
-        setMore(false);
-        searchRef.current = "";
-        setNotify({
-            isOpen: true,
-            message: 'Deleted Successfully',
-            type: 'error'
-        })
+        deleteGame(id).then(r => {
+            setNotify({
+                isOpen: true,
+                message: 'Deleted Successfully',
+                type: 'error'
+            });
+            window.location.reload(false);
+        });
     }
 
     if(loading) return (<div>Loading...</div>);

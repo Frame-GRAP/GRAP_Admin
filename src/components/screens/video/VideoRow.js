@@ -69,7 +69,7 @@ export default function VideoRow(props) {
                                     isOpen: true,
                                     title:'등록취소하시겠습니까?',
                                     subTitle:"",
-                                    onConfirm: () => {onUnRegister(video.id, gameId)}
+                                    onConfirm: () => {onRegister(video.id, gameId)}
                                 })
                             }}/>
                     )}
