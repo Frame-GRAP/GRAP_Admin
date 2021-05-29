@@ -80,7 +80,7 @@ export async function registerVideo(videoId, gameId) {
     const videoRegisterUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
 
     await axios({
-        method: "post",
+        method: "put",
         url: videoRegisterUrl
     }).then((res)=>{
         console.log(res.data);

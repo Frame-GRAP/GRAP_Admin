@@ -31,14 +31,35 @@ function Main() {
                     <i className="fa fa-gamepad fa-2x text-lightblue"></i>
                     <div className="card_inner">
                         <p className="text-primary-p">Number of Games</p>
-                        <span className="font-bold text-title">{gameCount}</span>
+                        <span className="font-bold text-title">8877</span>
                     </div>
                 </div>
                 <div className="card" onClick={() => history.push("/video")}>
                     <i className="fa fa-video-camera fa-2x text-red"></i>
                     <div className="card_inner">
                         <p className="text-primary-p">Number of Videos</p>
-                        <span className="font-bold text-title"></span>
+                        <span className="font-bold text-title">5890</span>
+                    </div>
+                </div>
+                <div className="card" onClick={() => history.push("/user")}>
+                    <i className="fa fa-user fa-2x text-lightblue"></i>
+                    <div className="card_inner">
+                        <p className="text-primary-p">Number of Users</p>
+                        <span className="font-bold text-title">5890</span>
+                    </div>
+                </div>
+                <div className="card" onClick={() => history.push("/coupon")}>
+                    <i className="fa fa-money fa-2x text-red"></i>
+                    <div className="card_inner">
+                        <p className="text-primary-p">Number of Coupons</p>
+                        <span className="font-bold text-title">5890</span>
+                    </div>
+                </div>
+                <div className="card" onClick={() => history.push("/report")}>
+                    <i className="fa fa-shield fa-2x text-lightblue"></i>
+                    <div className="card_inner">
+                        <p className="text-primary-p">Number of Report</p>
+                        <span className="font-bold text-title">5890</span>
                     </div>
                 </div>
             </div>
