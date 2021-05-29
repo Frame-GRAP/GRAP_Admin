@@ -33,6 +33,18 @@ function Sidebar({ sidebarOpen, closeSidebar }) {
                     <i className="fa fa-video-camera"></i>
                     <a>Video</a>
                 </div>
+                <div className={`sidebar_link ${(pathName === "/user") && "active_menu_link"}`} onClick={() => history.push("/user")}>
+                    <i className="fa fa-user"></i>
+                    <a>User</a>
+                </div>
+                <div className={`sidebar_link ${(pathName === "/coupon") && "active_menu_link"}`} onClick={() => history.push("/coupon")}>
+                    <i className="fa fa-money"></i>
+                    <a>Coupon</a>
+                </div>
+                <div className={`sidebar_link ${(pathName === "/report") && "active_menu_link"}`} onClick={() => history.push("/report")}>
+                    <i className="fa fa-shield"></i>
+                    <a>Report</a>
+                </div>
                 <div className="sidebar_logout">
                     <i className="fa fa-power-off"></i>
                     <a href="#">Log out</a>
