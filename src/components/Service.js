@@ -86,3 +86,19 @@ export async function registerVideo(videoId, gameId) {
         console.log(res.data);
     })
 }
+
+
+
+export async function insertUser(data) {
+
+}
+
+
+export async function updateUser(data) {
+
+}
+
+
+export async function deleteUser(data) {
+
+}

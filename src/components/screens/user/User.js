@@ -17,11 +17,12 @@ import {
 import axios from "axios";
 import Controller from "../../controls/Controller";
 import Popup from "../../controls/Popup";
-import {deleteGame, insertGame, updateGame} from "../../Service";
+import {deleteUser, insertUser, updateUser} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
 import UserForm from "./UserForm";
 import UserRow from "./UserRow";
+import "./User.css";
 
 const useStyles = makeStyles(theme => ({
     searchInput:{
@@ -38,14 +39,13 @@ const useStyles = makeStyles(theme => ({
 function User(){
     const [userPage, setUserPage] = useState(0);
     const [rowsPerPage, setRowsPerPage]= useState(10);
-    const [gameData, setGameData] = useState([]);
+    const [userData, setUserData] = useState([]);
 
     const [openPopup, setOpenPopup] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: games => { return games; } })
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
-    const [more, setMore] = useState(false);
     const searchRef = useRef();
     const [loading, setLoading] = useState(true);
 
@@ -62,7 +62,7 @@ function User(){
 
     useEffect(()=> {
         async function fetchData() {
-            const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
+            const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/user/all");
 
             setUserData(request.data);
             return request;
@@ -106,8 +106,8 @@ function User(){
     }
 
     const addOrEdit = (data, resetForm) => {
-        if(data.img == undefined){//edit
-            updateGame(data).then(r => {
+        if(data.picture == undefined){//edit
+            updateUser(data).then(r => {
                 resetForm()
                 setNotify({
                     isOpen: true,
@@ -120,7 +120,7 @@ function User(){
 
         else { //insert
             console.log("insert");
-            insertGame(data).then(r => {
+            insertUser(data).then(r => {
                 resetForm();
                 setNotify({
                     isOpen: true,
@@ -142,7 +142,7 @@ function User(){
             ...confirmDialog,
             isOpen: false
         })
-        deleteGame(id).then(r => {
+        deleteUser(id).then(r => {
             setNotify({
                 isOpen: true,
                 message: 'Deleted Successfully',
@@ -178,6 +178,10 @@ function User(){
                                 <TableCell>No</TableCell>
                                 <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
+                                <TableCell>email</TableCell>
+                                <TableCell>picture</TableCell>
+                                <TableCell>nickname</TableCell>
+                                <TableCell>actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

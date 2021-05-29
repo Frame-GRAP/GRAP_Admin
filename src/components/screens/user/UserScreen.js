@@ -15,7 +15,7 @@ function UserScreen() {
     };
 
     return (
-        <div className="game_screen">
+        <div className="user_screen">
             <Navbar sidebarOpen={sidebarOpen} openSidebar={openSidebar} />
             <User />
             <Sidebar sidebarOpen={sidebarOpen} closeSidebar={closeSidebar} />

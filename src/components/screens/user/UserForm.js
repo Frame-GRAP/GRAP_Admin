@@ -5,8 +5,8 @@ import Controller from "../../controls/Controller";
 
 const initialValues = {
     name: "",
-    img: "",
     email: "",
+    picture: "",
     nickname: "",
     membership: "",
 }
@@ -20,12 +20,12 @@ function UserForm(props) {
             temp.name = fieldValues.name ? "" : "This field is required."
         if('email' in fieldValues)
             temp.email = fieldValues.email ? "" : "This field is required"
+        if('picture' in fieldValues)
+            temp.picture = fieldValues.picture ? "" : "This field is required."
         if('nickname' in fieldValues)
             temp.nickname = fieldValues.nickname ? "" : "This field is required"
         if('membership' in fieldValues)
             temp.membership = fieldValues.membership ? "" : "This field is required"
-        if('img' in fieldValues)
-            temp.img = fieldValues.img ? "" : "This field is required."
         setErrors({
             ...temp
         })
@@ -95,11 +95,11 @@ function UserForm(props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Controller.Image
-                        name="img"
-                        label="Img"
-                        value={values.img}
+                        name="picture"
+                        label="Picture"
+                        value={values.picture}
                         onChange={handleInputChange}
-                        error={errors.img}
+                        error={errors.picture}
                     />
                     <div>
                         <Controller.Button
