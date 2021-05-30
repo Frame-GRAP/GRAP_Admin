@@ -87,18 +87,35 @@ export async function registerVideo(videoId, gameId) {
     })
 }
 
-
-
-export async function insertUser(data) {
+export async function deleteUser(data) {
 
 }
-
 
 export async function updateUser(data) {
 
 }
 
 
-export async function deleteUser(data) {
+export async function deleteReview(reviewId) {
+    const reviewDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/review/${reviewId}`;
 
+    await axios({
+        method: "delete",
+        url: reviewDeleteUrl
+    }).then((res)=>{
+        console.log(res.data);
+    })
 }
+
+
+export async function deleteReport(reportId) {
+    const reportDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/report/${reportId}`;
+
+    await axios({
+        method: "delete",
+        url: reportDeleteUrl
+    }).then((res)=>{
+        console.log(res.data);
+    })
+}
+

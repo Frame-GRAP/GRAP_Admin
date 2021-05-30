@@ -5,17 +5,8 @@ import {Box, Collapse, Table, TableBody, TableHead, Typography} from "@material-
 import React, {useEffect, useState} from "react";
 
 function ReportRow(props) {
-    const {index, report, page, rowsPerPage, getVideo, setConfirmDialog, onDelete, onRegister, onUnRegister, gameId} = props;
+    const {index, report, page, rowsPerPage, getVideo, setConfirmDialog, onAccept, onReject} = props;
     const [more, setMore] = useState(false);
-
-/*
-    useEffect(() => {
-        if(video.registered)
-            setRegistered("true");
-        else
-            setRegistered("false");
-    }, [video])
-*/
 
     return (
         <>
@@ -28,27 +19,17 @@ function ReportRow(props) {
                 <TableCell>{report.reportType}</TableCell>
                 <TableCell>{report.content}</TableCell>
                 <TableCell>{report.modifiedDate}</TableCell>
+                <TableCell>{report.target}</TableCell>
+                <TableCell>{report.targetId}</TableCell>
                 <TableCell>
                     <Controller.Button
                         text="more"
                         color="primary"
                         size="small"
                         onClick={() => setMore(!more)}/>
-                    <Controller.Button
-                        text="Delete"
-                        color="primary"
-                        size="small"
-                        onClick={() => {
-                            setConfirmDialog({
-                                isOpen: true,
-                                title:'정말 지우시겠습니까?',
-                                subTitle:"되돌릴 수 없습니다.",
-                                onConfirm: () => {onDelete(report.id)}
-                            })
-                        }}/>
                 </TableCell>
             </TableRow>
-            {/*<TableRow>
+            <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={more} timeout="auto" unmountOnExit>
                         <Box margin={1}>
@@ -58,21 +39,78 @@ function ReportRow(props) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>video or comment</TableCell>
+                                        <TableCell>target</TableCell>
+                                        <TableCell>actions</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow style={{ height: "300px" }}>
-                                        <TableCell >
-                                            {getVideo(video.platform, video.urlKey)}
-                                        </TableCell>
-                                    </TableRow>
+                                    {report.target === "video" ? (
+                                        <TableRow style={{ height: "300px" }}>
+                                            <TableCell >
+                                                {/*{getVideo(video.platform, video.urlKey)}*/}
+                                            </TableCell>
+                                            <Controller.Button
+                                                text="ACCEPT"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setConfirmDialog({
+                                                        isOpen: true,
+                                                        title:'해당 영상을 지우시겠습니까?',
+                                                        subTitle:"되돌릴 수 없습니다.",
+                                                        onConfirm: () => {onAccept(report.id, report.target, report.targetId, report.gameId)}
+                                                    })
+                                                }}/>
+                                            <Controller.Button
+                                                text="REJECT"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setConfirmDialog({
+                                                        isOpen: true,
+                                                        title:'신고를 반려하시겠습니까?',
+                                                        subTitle:"되돌릴 수 없습니다.",
+                                                        onConfirm: () => {onReject(report.id)}
+                                                    })
+                                                }}/>
+                                        </TableRow>
+                                    ) : (
+                                        <TableRow style={{ height: "100px" }}>
+                                            <TableCell >
+                                                {/*{getVideo(video.platform, video.urlKey)}*/}
+                                            </TableCell>
+                                            <Controller.Button
+                                                text="ACCEPT"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setConfirmDialog({
+                                                        isOpen: true,
+                                                        title:'해당 댓글을 삭제하시겠습니까?',
+                                                        subTitle:"되돌릴 수 없습니다.",
+                                                        onConfirm: () => {onAccept(report.id, report.target, report.targetId)}
+                                                    })
+                                                }}/>
+                                            <Controller.Button
+                                                text="DENY"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setConfirmDialog({
+                                                        isOpen: true,
+                                                        title:'신고를 반려하시겠습니까?',
+                                                        subTitle:"되돌릴 수 없습니다.",
+                                                        onConfirm: () => {onReject(report.id)}
+                                                    })
+                                                }}/>
+                                        </TableRow>
+                                    )}
                                 </TableBody>
                             </Table>
                         </Box>
                     </Collapse>
                 </TableCell>
-            </TableRow>*/}
+            </TableRow>
         </>
     )
 

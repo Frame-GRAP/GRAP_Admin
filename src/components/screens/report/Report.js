@@ -9,7 +9,7 @@ import axios from "axios";
 import Controller from "../../controls/Controller";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
-import {deleteVideo, registerVideo} from "../../Service";
+import {deleteReport, deleteReview, deleteVideo} from "../../Service";
 import ReportRow from "./ReportRow";
 import "./Report.css";
 
@@ -18,32 +18,31 @@ function Report(){
     const [rowsPerPage, setRowsPerPage]= useState(10);
     const [reportData, setReportData] = useState([]);
     const [reportId, setReportId] = useState(0);
-    const [videoData, setVideoData] = useState([]);
     const [open, setOpen] = useState(false);
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''});
     const [loading, setLoading] = useState(true);
     const [more, setMore] = useState(false);
-    const [videoFilter, setVideoFilter] = useState({ fn: report => { return report; } });
+    const [reportFilter, setReportFilter] = useState({ fn: report => { return report; } });
     const [currentTab, setCurrentTab] = useState("All");
 
     const handleSort = (event, value) => {
         setCurrentTab(value);
-        setVideoFilter({
+        setReportFilter({
             fn: video => {
                 if(value == "All")
                     return video;
-                else if(value == "Registered")
-                    return video.filter(x => x.registered == true)
-                else if(value == "Not Registered")
-                    return video.filter(x => x.registered == false)
+                else if(value == "Video")
+                    return video.filter(x => x.target == "video")
+                else if(value == "Comment")
+                    return video.filter(x => x.target == "comment")
             }
         })
     }
 
-    /*const recordsAfterPagingAndSortingVideo = () => {
-        return videoFilter.fn(videoData).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
-    }*/
+    const recordsAfterPagingAndSortingVideo = () => {
+        return reportFilter.fn(reportData).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -77,26 +76,6 @@ function Report(){
         }
     }, []);
 
-    /*useEffect(()=> {
-        setLoading(true);
-        async function fetchData() {
-            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/all`);
-
-            setVideoData(request.data);
-            return request;
-        }
-
-        fetchData();
-        setLoading(false);
-        return () => {
-            setLoading(true);
-        }
-    }, [gameId]);
-
-    const changeGameId = (event, value) => {
-        setGameId(value.id)
-    }*/
-
     const getVideo = (platform, urlKey) => {
         let player_Url = "";
         if(platform === "twitch"){
@@ -116,43 +95,39 @@ function Report(){
         )
     }
 
-    /*async function refreshVideo() {
-        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/all`);
-
-        setVideoData(request.data);
-        return request;
-    }*/
-
-    const onDelete = id => {
+    const onAccept = (reportId, type, targetId, gameId) => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        /*deleteVideo(id, gameId).then(r => {
-            refreshVideo().then(r => {setLoading(false);})
+
+        if(type === "video"){
+            deleteVideo(targetId, gameId);
+        }
+        else{
+            deleteReview(targetId);
+        }
+        deleteReport(reportId).then(r => {
             setNotify({
                 isOpen: true,
                 message: 'Deleted Successfully',
                 type: 'error'
             })
-            window.location.reload(false);
-        });*/
+        })
     }
 
-    const onRegister = (videoId, gameId) => {
+    const onReject = reportId => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        /*registerVideo(videoId, gameId).then(r => {
-            refreshVideo().then(r => {setLoading(false);})
+        deleteReport(reportId).then(r => {
             setNotify({
                 isOpen: true,
-                message: 'Register Successfully',
-                type: 'success'
-            });
-            window.location.reload(false);
-        })*/
+                message: 'Deleted Successfully',
+                type: 'error'
+            })
+        })
     }
 
     return (
@@ -170,8 +145,8 @@ function Report(){
                 />*/}
                 <Tabs value={currentTab} onChange={handleSort} aria-label="simple tabs example">
                     <Tab label="All" value="All" />
-                    <Tab label="Processing" value="Processing"/>
-                    <Tab label="Completed" value="Not Registered"/>
+                    <Tab label="Video" value="Video"/>
+                    <Tab label="Comment" value="Comment"/>
                 </Tabs>
             </div>
             <TableContainer>
@@ -184,11 +159,14 @@ function Report(){
                             <TableCell>reportType</TableCell>
                             <TableCell>content</TableCell>
                             <TableCell>modifiedDate</TableCell>
+                            <TableCell>target</TableCell>
+                            <TableCell>targetId</TableCell>
                             <TableCell>actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {reportData.map((report, index) => (
+                        {recordsAfterPagingAndSortingVideo()
+                            .map((report, index) => (
                                 <ReportRow
                                     key={index}
                                     index={index}
@@ -197,8 +175,8 @@ function Report(){
                                     rowsPerPage={rowsPerPage}
                                     getVideo={getVideo}
                                     setConfirmDialog={setConfirmDialog}
-                                    onDelete={onDelete}
-                                    onRegister={onRegister}
+                                    onAccept={onAccept}
+                                    onReject={onReject}
                                 />
                             ))}
                     </TableBody>

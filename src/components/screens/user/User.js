@@ -106,30 +106,16 @@ function User(){
     }
 
     const addOrEdit = (data, resetForm) => {
-        if(data.picture == undefined){//edit
-            updateUser(data).then(r => {
-                resetForm()
-                setNotify({
-                    isOpen: true,
-                    message: 'Submitted Successfully',
-                    type: 'success'
-                })
-                window.location.reload(false);
-            });
-        }
-
-        else { //insert
-            console.log("insert");
-            insertUser(data).then(r => {
-                resetForm();
-                setNotify({
-                    isOpen: true,
-                    message: 'Submitted Successfully',
-                    type: 'success'
-                })
-            });
+        updateUser(data).then(r => {
+            resetForm()
+            setNotify({
+                isOpen: true,
+                message: 'Submitted Successfully',
+                type: 'success'
+            })
             window.location.reload(false);
-        }
+        });
+
     }
 
     const openInPopup = (user) => {
