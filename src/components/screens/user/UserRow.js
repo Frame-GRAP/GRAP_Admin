@@ -8,6 +8,8 @@ function UserRow(props) {
     const {index, user, userPage, rowsPerPage, openInPopup, setConfirmDialog, onDelete} = props;
     const [more, setMore] = useState(false);
 
+    console.log(user.nickname);
+
     return (
         <>
             <TableRow key={index}>
@@ -16,7 +18,8 @@ function UserRow(props) {
                 </TableCell>
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
-                <TableCell><img width="200px" height="100px" src={user.picture} alt="header"/></TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell><img width="80px" height="80px" src={user.picture} alt="header"/></TableCell>
                 <TableCell>{user.nickname}</TableCell>
                 <TableCell>{user.membership}</TableCell>
                 <TableCell>
