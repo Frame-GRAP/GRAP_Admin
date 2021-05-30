@@ -60,7 +60,7 @@ body {
   color: #3b9668;
 }
 
-.game_screen, .video_screen, .home_screen, .user_screen {
+.game_screen, .video_screen, .home_screen, .user_screen, .report_screen {
   display: grid;
   height: 100vh;
   grid-template-columns: 0.8fr 1fr 1fr 1fr;
@@ -71,7 +71,7 @@ body {
 }
 
 @media only screen and (max-width: 978px) {
-  .game_screen, .video_screen, home_screen, .user_screen {
+  .game_screen, .video_screen, home_screen, .user_screen, .report_screen {
     grid-template-columns: 1fr;
     grid-template-rows: 0.2fr 3fr;
     grid-template-areas:
