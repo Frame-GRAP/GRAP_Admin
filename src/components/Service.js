@@ -87,8 +87,15 @@ export async function registerVideo(videoId, gameId) {
     })
 }
 
-export async function deleteUser(data) {
+export async function deleteUser(userId) {
+    const userDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`;
 
+    await axios({
+        method: "delete",
+        url: userDeleteUrl
+    }).then((res)=>{
+        console.log(res.data);
+    })
 }
 
 export async function updateUser(data) {

@@ -90,21 +90,6 @@ function User(){
         return filterFn.fn(userData).slice(userPage * rowsPerPage, (userPage + 1) * rowsPerPage);
     }
 
-    /*const addOrEdit = (game, resetForm) => {
-        insertGame(game);
-        resetForm();
-        setRecordForEdit(null);
-        setOpenPopup(false);
-    }*/
-
-    async function refreshGame() {
-        const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
-
-        setRecordForEdit(request.data);
-        setUserData(request.data);
-        return request;
-    }
-
     const addOrEdit = (data, resetForm) => {
         updateUser(data).then(r => {
             resetForm()
@@ -123,12 +108,12 @@ function User(){
         setOpenPopup(true);
     }
 
-    const onDelete = id => {
+    const onDelete = userId => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        deleteUser(id).then(r => {
+        deleteUser(userId).then(r => {
             setNotify({
                 isOpen: true,
                 message: 'Deleted Successfully',
