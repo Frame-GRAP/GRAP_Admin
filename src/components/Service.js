@@ -1,16 +1,17 @@
 import axios from "axios";
 
-export async function insertGame(data) {
+export async function insertGame(game) {
     const dto = new Object();
-    dto.name = data.name;
-    dto.description = data.description;
-    dto.developer = data.developer;
-    dto.publisher = data.publisher;
-    dto.releaseDate = data.releaseDate;
-    dto.downloadUrl = data.downloadUrl;
+    dto.name = game.name;
+    dto.description = game.description;
+    dto.price = game.price;
+    dto.developer = game.developer;
+    dto.publisher = game.publisher;
+    dto.releaseDate = game.releaseDate;
+    dto.downloadUrl = game.downloadUrl;
 
     const formData = new FormData();
-    formData.append("img", data.img[0]);
+    formData.append("img", game.img[0]);
     formData.append("dto", new Blob([JSON.stringify(dto)], {type: "application/json"}));
 
     const gamePostUrl = "http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game"
@@ -31,6 +32,7 @@ export async function updateGame(game) {
     //dto.id = game.id;
     dto.name = game.name;
     dto.description = game.description;
+    dto.price = game.price;
     //dto.developer = game.developer;
     //dto.publisher = game.publisher;
     //dto.releaseDate = game.releaseDate;

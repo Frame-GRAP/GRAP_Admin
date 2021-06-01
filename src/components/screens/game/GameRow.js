@@ -23,6 +23,7 @@ export default function GameRow(props) {
                 <TableCell>{game.id}</TableCell>
                 <TableCell>{game.name}</TableCell>
                 <TableCell><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
+                <TableCell>{game.price}</TableCell>
                 <TableCell>{game.publisher}</TableCell>
                 <TableCell>{releaseDate}</TableCell>
                 <TableCell>
