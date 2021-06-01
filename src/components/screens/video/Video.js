@@ -18,7 +18,6 @@ function Video(){
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage]= useState(10);
     const [gameData, setGameData] = useState([]);
-    const [gameId, setGameId] = useState(0);
     const [videoData, setVideoData] = useState([]);
     const [open, setOpen] = useState(false);
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
@@ -27,6 +26,10 @@ function Video(){
     const [more, setMore] = useState(false);
     const [videoFilter, setVideoFilter] = useState({ fn: video => { return video; } });
     const [currentTab, setCurrentTab] = useState("All");
+
+    const [searchResult, setSearchResult] = useState([]);
+    const [gameName, setGameName] = useState("");
+    const [gameId, setGameId] = useState(0);
 
     const handleSort = (event, value) => {
         setCurrentTab(value);
@@ -63,20 +66,16 @@ function Video(){
         setOpen(false);
     };
 
-    useEffect(()=> {
-        async function fetchData() {
-            const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
+    useEffect(() => {
+        async function fetchGameData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
 
-            setGameData(request.data);
+            setSearchResult(request.data);
             return request;
         }
 
-        fetchData();
-        setLoading(false);
-        return () => {
-            setLoading(true);
-        }
-    }, []);
+        fetchGameData();
+    }, [gameName])
 
     useEffect(()=> {
         setLoading(true);
@@ -94,9 +93,6 @@ function Video(){
         }
     }, [gameId]);
 
-    const changeGameId = (event, value) => {
-        setGameId(value.id)
-    }
 
     const getVideo = (platform, urlKey) => {
         let player_Url = "";
@@ -156,6 +152,14 @@ function Video(){
         })
     }
 
+    const changeGameName = (event) => {
+        setGameName(event.target.value);
+    }
+
+    const changeGameId = (event, value) => {
+        setGameId(value.id);
+    }
+
     return (
         <div className="video_container">
             <div className="video_title">
@@ -163,10 +167,11 @@ function Video(){
             </div>
             <div className="game_selector">
                 <Autocomplete
-                    options={gameData}
-                    getOptionLabel={(option => option.name)}
-                    style={{width: 300}}
-                    renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" />}
+                    id="combo-box-demo"
+                    options={searchResult}
+                    getOptionLabel={(option) => option.name}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" onChange={changeGameName}/>}
                     onChange={changeGameId}
                 />
                 <Tabs value={currentTab} onChange={handleSort} aria-label="simple tabs example">
