@@ -40,15 +40,15 @@ function Coupon(){
     const [couponPage, setCouponPage] = useState(0);
     const [rowsPerPage, setRowsPerPage]= useState(10);
     const [couponData, setCouponData] = useState([]);
-
     const [openPopup, setOpenPopup] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: coupons => { return coupons; } })
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
-    const [more, setMore] = useState(false);
-    const searchRef = useRef();
     const [loading, setLoading] = useState(true);
+
+    const [searchResult, setSearchResult] = useState([]);
+    const [gameName, setGameName] = useState("");
+    const [gameId, setGameId] = useState(0);
 
     const classes = useStyles();
 
@@ -63,7 +63,7 @@ function Coupon(){
 
     useEffect(()=> {
         async function fetchData() {
-            const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/coupon/all");
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon/all`);
 
             setCouponData(request.data);
             return request;
@@ -73,23 +73,18 @@ function Coupon(){
         return () => {
             setLoading(true);
         }
-    }, []);
+    }, [gameId]);
 
-    const handleSearch = e => {
-        let target = e.target;
-        setFilterFn({
-            fn: coupons => {
-                if(target.value == "")
-                    return coupons;
-                else
-                    return coupons.filter(x => x.name.toLowerCase().includes(target.value))
-            }
-        })
-    }
+    useEffect(() => {
+        async function fetchGameData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
 
-    const recordsAfterPagingAndSorting = () => {
-        return filterFn.fn(couponData).slice(couponPage * rowsPerPage, (couponPage + 1) * rowsPerPage);
-    }
+            setSearchResult(request.data);
+            return request;
+        }
+
+        fetchGameData();
+    }, [gameName])
 
     const addCoupon = (data, resetForm) => {
         console.log("edit")
@@ -135,6 +130,14 @@ function Coupon(){
         });
     }
 
+    const changeGameName = (event) => {
+        setGameName(event.target.value);
+    }
+
+    const changeGameId = (event, value) => {
+        setGameId(value.id);
+    }
+
     if(loading) return (<div>Loading...</div>);
     return (
         <div className="coupon_container">
@@ -142,13 +145,14 @@ function Coupon(){
                 <h1>Game Select</h1>
             </div>
             <div className="game_selector">
-                {/*<Autocomplete
-                    options={gameData}
-                    getOptionLabel={(option => option.name)}
-                    style={{width: 300}}
-                    renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" />}
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={searchResult}
+                    getOptionLabel={(option) => option.name}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" onChange={changeGameName}/>}
                     onChange={changeGameId}
-                />*/}
+                />
             </div>
             <div className="coupon_table" >
                 <Toolbar>
@@ -172,8 +176,7 @@ function Coupon(){
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {recordsAfterPagingAndSorting()
-                                .map((coupon, index) => (
+                            {couponData.map((coupon, index) => (
                                     <CouponRow
                                         key={index}
                                         index={index}
