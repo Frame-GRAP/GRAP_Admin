@@ -185,6 +185,7 @@ function Game(){
                                 <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
                                 <TableCell>image</TableCell>
+                                <TableCell>price</TableCell>
                                 <TableCell>publisher</TableCell>
                                 <TableCell>releaseDate</TableCell>
                                 <TableCell>actions</TableCell>

@@ -6,6 +6,7 @@ import Controller from "../../controls/Controller";
 const initialValues = {
     name: "",
     description: "",
+    price: "",
     developer: "",
     publisher: "",
     releaseDate: new Date(),
@@ -22,6 +23,8 @@ function GameForm(props) {
             temp.name = fieldValues.name ? "" : "This field is required."
         if ('description' in fieldValues)
             temp.description = fieldValues.description ? "" : "This field is required."
+        if ('price' in fieldValues)
+            temp.price = fieldValues.price ? "" : "This field is required."
         if ('developer' in fieldValues)
             temp.developer = fieldValues.developer ? "" : "This field is required."
         if ('publisher' in fieldValues)
@@ -80,6 +83,13 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.description}
                     />
+                    <Controller.Input
+                        name="price"
+                        label="Price"
+                        value={values.price}
+                        onChange={handleInputChange}
+                        error={errors.price}
+                    />
                     {!recordForEdit &&
                     <Controller.Input
                         name="developer"
@@ -105,6 +115,8 @@ function GameForm(props) {
                         onChange={handleInputChange}
                         error={errors.downloadUrl}
                     />
+                </Grid>
+                <Grid item xs={6}>
                     {!recordForEdit &&
                     <Controller.DatePicker
                         name="releaseDate"
@@ -113,8 +125,6 @@ function GameForm(props) {
                         onChange={handleInputChange}
                     />
                     }
-                </Grid>
-                <Grid item xs={6}>
                     {!recordForEdit &&
                     <Controller.Image
                         name="img"
