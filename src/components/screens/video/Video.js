@@ -153,11 +153,16 @@ function Video(){
     }
 
     const changeGameName = (event) => {
-        setGameName(event.target.value);
+        setTimeout(() => {
+            const getName = event.target.value;
+            if(getName !== "")
+                setGameName(getName);
+        }, 1000);
     }
 
     const changeGameId = (event, value) => {
-        setGameId(value.id);
+        const getId = value.id;
+        setGameId(getId);
     }
 
     return (
