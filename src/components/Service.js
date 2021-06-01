@@ -67,8 +67,8 @@ export async function deleteGame(gameId) {
 
 }
 
-export async function deleteVideo(videoId, gameId) {
-    const videoDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
+export async function deleteVideo(videoId) {
+    const videoDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/video/${videoId}`;
 
     await axios({
         method: "delete",
