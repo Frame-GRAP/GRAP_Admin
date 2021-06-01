@@ -128,3 +128,57 @@ export async function deleteReport(reportId) {
     })
 }
 
+
+export async function insertCoupon(coupon, gameId) {
+    const couponInsertUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/1/coupon`;
+
+    const dto = new Object();
+    dto.couponName = coupon.couponName;
+    dto.expirationDate = coupon.expirationDate;
+
+    const json = JSON.stringify(dto);
+
+    await axios({
+        method: "post",
+        url: couponInsertUrl,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        data: json,
+    }).then((res) => {
+        console.log(res);
+    })
+}
+
+
+export async function updateCoupon(coupon) {
+    const couponUpdateUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/coupon/${coupon.couponId}`;
+
+    const dto = new Object();
+    dto.couponName = coupon.couponName;
+    dto.expirationDate = coupon.expirationDate;
+
+    const json = JSON.stringify(dto);
+
+    await axios({
+        method: "put",
+        url: couponUpdateUrl,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        data: json,
+    }).then((res) => {
+        console.log(res);
+    })
+}
+
+export async function deleteCoupon(couponId) {
+    const couponDeleteUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/coupon/${couponId}`;
+
+    await axios({
+        method: "delete",
+        url: couponDeleteUrl
+    }).then((res)=>{
+        console.log(res.data);
+    })
+}
