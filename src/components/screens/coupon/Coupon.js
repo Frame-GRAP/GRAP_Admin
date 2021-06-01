@@ -19,7 +19,7 @@ import axios from "axios";
 import CouponForm from "./CouponForm";
 import Controller from "../../controls/Controller";
 import Popup from "../../controls/Popup";
-import {deleteGame, insertGame, updateGame} from "../../Service";
+import {deleteCoupon, insertCoupon, updateCoupon} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
 import CouponRow from "./CouponRow";
@@ -43,7 +43,7 @@ function Coupon(){
 
     const [openPopup, setOpenPopup] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: games => { return games; } })
+    const [filterFn, setFilterFn] = useState({ fn: coupons => { return coupons; } })
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
     const [more, setMore] = useState(false);
@@ -91,31 +91,28 @@ function Coupon(){
         return filterFn.fn(couponData).slice(couponPage * rowsPerPage, (couponPage + 1) * rowsPerPage);
     }
 
-    const addOrEdit = (data, resetForm) => {
-        if(data.img == undefined){//edit
-            updateGame(data).then(r => {
-                resetForm()
-                setNotify({
-                    isOpen: true,
-                    message: 'Submitted Successfully',
-                    type: 'success'
-                })
-                window.location.reload(false);
-            });
-        }
+    const addCoupon = (data, resetForm) => {
+        console.log("edit")
+        updateCoupon(data).then(r => {
+            resetForm()
+            setNotify({
+                isOpen: true,
+                message: 'Submitted Successfully',
+                type: 'success'
+            })
+        });
+    }
 
-        else { //insert
-            console.log("insert");
-            insertGame(data).then(r => {
-                resetForm()
-                setNotify({
-                    isOpen: true,
-                    message: 'Submitted Successfully',
-                    type: 'success'
-                })
-            });
-            window.location.reload(false);
-        }
+    const editCoupon = (data, resetForm) => {
+        console.log("insert");
+        insertCoupon(data).then(r => {
+            resetForm()
+            setNotify({
+                isOpen: true,
+                message: 'Submitted Successfully',
+                type: 'success'
+            })
+        });
     }
 
     const openInPopup = (coupon) => {
@@ -128,7 +125,7 @@ function Coupon(){
             ...confirmDialog,
             isOpen: false
         })
-        deleteGame(id).then(r => {
+        deleteCoupon(id).then(r => {
             setNotify({
                 isOpen: true,
                 message: 'Deleted Successfully',
@@ -169,8 +166,8 @@ function Coupon(){
                                 <TableCell>No</TableCell>
                                 <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
-                                <TableCell>expirationData</TableCell>
-                                <TableCell>gameImg</TableCell>
+                                <TableCell>expirationDate</TableCell>
+                                <TableCell>gameHeaderImage</TableCell>
                                 <TableCell>gameName</TableCell>
                             </TableRow>
                         </TableHead>
@@ -208,7 +205,8 @@ function Coupon(){
                 >
                     <CouponForm
                         recordForEdit={recordForEdit}
-                        addOrEdit={addOrEdit}
+                        addCoupon={addCoupon}
+                        editCoupon={editCoupon}
                     />
                 </Popup>
                 <Notification

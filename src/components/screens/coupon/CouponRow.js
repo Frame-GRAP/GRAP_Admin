@@ -9,7 +9,7 @@ export default function CouponRow(props) {
     const [expirationDate, setExpirationDate] = useState("");
 
     useEffect(() => {
-        setExpirationDate(coupon.releaseDate);
+        setExpirationDate(coupon.expirationDate);
     }, [coupon]);
 
 
@@ -22,7 +22,7 @@ export default function CouponRow(props) {
                 <TableCell>{coupon.couponId}</TableCell>
                 <TableCell>{coupon.couponName}</TableCell>
                 <TableCell>{expirationDate}</TableCell>
-                <TableCell><img width="200px" height="100px" src={coupon.gameHeaderImg} alt="header"/></TableCell>
+                <TableCell><img width="200px" height="100px" src={coupon.gameHeaderImage} alt="header"/></TableCell>
                 <TableCell>{coupon.gameName}</TableCell>
                 <TableCell>
                     <Controller.Button

@@ -10,7 +10,7 @@ const initialValues = {
 }
 
 function CouponForm(props) {
-    const { addOrEdit, recordForEdit, editGame } = props
+    const { addCoupon, editCoupon, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -40,7 +40,12 @@ function CouponForm(props) {
     const handleSubmit = e => {
         e.preventDefault()
         if (validate()) {
-            addOrEdit(values, resetForm);
+            if(!recordForEdit){
+                editCoupon(values, resetForm);
+            }
+            else{
+                addCoupon(values, resetForm);
+            }
         }
     }
 
