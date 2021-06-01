@@ -5,6 +5,7 @@ import VideoScreen from "./components/screens/video/VideoScreen";
 import HomeScreen from "./components/screens/HomeScreen";
 import UserScreen from "./components/screens/user/UserScreen";
 import ReportScreen from "./components/screens/report/ReportScreen";
+import CouponScreen from "./components/screens/coupon/CouponScreen";
 
 function App() {
     const [sidebarOpen, setsidebarOpen] = useState(false);
@@ -35,6 +36,9 @@ function App() {
                     </Route>
                     <Route exact path="/report">
                         <ReportScreen />
+                    </Route>
+                    <Route exact path="/coupon">
+                        <CouponScreen />
                     </Route>
                 </Switch>
             </Router>
