@@ -64,7 +64,6 @@ export async function deleteGame(gameId) {
     }).then((res)=>{
         console.log(res);
     })
-
 }
 
 export async function deleteVideo(videoId) {
@@ -78,8 +77,8 @@ export async function deleteVideo(videoId) {
     })
 }
 
-export async function registerVideo(videoId, gameId) {
-    const videoRegisterUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/video/${videoId}`;
+export async function registerVideo(videoId) {
+    const videoRegisterUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/video/${videoId}`;
 
     await axios({
         method: "put",
@@ -133,7 +132,7 @@ export async function insertCoupon(coupon, gameId) {
     const couponInsertUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/1/coupon`;
 
     const dto = new Object();
-    dto.couponName = coupon.couponName;
+    dto.name = coupon.name;
     dto.expirationDate = coupon.expirationDate;
 
     const json = JSON.stringify(dto);
@@ -155,7 +154,7 @@ export async function updateCoupon(coupon) {
     const couponUpdateUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/coupon/${coupon.couponId}`;
 
     const dto = new Object();
-    dto.couponName = coupon.couponName;
+    dto.name = coupon.name;
     dto.expirationDate = coupon.expirationDate;
 
     const json = JSON.stringify(dto);

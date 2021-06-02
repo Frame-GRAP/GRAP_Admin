@@ -20,7 +20,7 @@ export default function CouponRow(props) {
                     {couponPage * rowsPerPage + index + 1}
                 </TableCell>
                 <TableCell>{coupon.couponId}</TableCell>
-                <TableCell>{coupon.couponName}</TableCell>
+                <TableCell>{coupon.name}</TableCell>
                 <TableCell>{expirationDate}</TableCell>
                 <TableCell><img width="200px" height="100px" src={coupon.gameHeaderImage} alt="header"/></TableCell>
                 <TableCell>{coupon.gameName}</TableCell>
