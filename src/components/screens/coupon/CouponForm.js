@@ -1,23 +1,28 @@
 import React, {useState, useEffect} from "react";
-import {Grid} from "@material-ui/core";
+import {Grid, TextField} from "@material-ui/core";
 import useForm, {Form} from "../../controls/useForm";
 import Controller from "../../controls/Controller";
+import axios from "axios";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const initialValues = {
     gameName:"",
-    couponName: "",
+    name: "",
     expirationDate: new Date()
 }
 
 function CouponForm(props) {
     const { addCoupon, editCoupon, recordForEdit } = props
+    const [gameName, setGameName] = useState("");
+    const [searchResult, setSearchResult] = useState([]);
+    const [gameId, setGameId] = useState(0);
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
         if ('gameName' in fieldValues)
             temp.gameName = fieldValues.gameName ? "" : "This field is required."
-        if ('couponName' in fieldValues)
-            temp.couponName = fieldValues.couponName ? "" : "This field is required."
+        if ('name' in fieldValues)
+            temp.name = fieldValues.name ? "" : "This field is required."
         if ('expirationDate' in fieldValues)
             temp.expirationDate = fieldValues.expirationDate ? "" : "This field is required."
         setErrors({
@@ -38,7 +43,8 @@ function CouponForm(props) {
     } = useForm(initialValues, true, validate);
 
     const handleSubmit = e => {
-        e.preventDefault()
+        e.preventDefault();
+        console.log(values);
         if (validate()) {
             if(!recordForEdit){
                 editCoupon(values, resetForm);
@@ -50,6 +56,17 @@ function CouponForm(props) {
     }
 
     useEffect(() => {
+        async function fetchGameData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
+
+            setSearchResult(request.data);
+            return request;
+        }
+
+        fetchGameData();
+    }, [gameName])
+
+    useEffect(() => {
         if(recordForEdit != null){
             setValues({
                 ...recordForEdit
@@ -57,25 +74,41 @@ function CouponForm(props) {
         }
     }, [recordForEdit])
 
+    const changeGameName = (event) => {
+        setTimeout(() => {
+            const getName = event.target.value;
+            if(getName !== "")
+                setGameName(getName);
+        }, 1000);
+    }
+
+    const changeGameId = (event, value) => {
+        if(value !== null){
+            const getId = value.id;
+            setGameId(getId);
+            setValues({...values, ["gameName"]: value.name});
+        }
+    }
+
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
                     {!recordForEdit &&
-                    <Controller.Input
-                        name="gameName"
-                        label="GameName"
-                        value={values.gameName}
-                        onChange={handleInputChange}
-                        error={errors.gameName}
+                    <Autocomplete
+                        options={searchResult}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" onChange={changeGameName}/>}
+                        onChange={changeGameId}
                     />
                     }
                     <Controller.Input
-                        name="couponName"
-                        label="CouponName"
-                        value={values.couponName}
+                        name="name"
+                        label="Name"
+                        value={values.name}
                         onChange={handleInputChange}
-                        error={errors.couponName}
+                        error={errors.name}
                     />
                     <Controller.DatePicker
                         name="expirationDate"

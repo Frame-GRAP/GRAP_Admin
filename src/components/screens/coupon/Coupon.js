@@ -2,10 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import './Coupon.css'
-import {
-    Box,
-    Collapse,
-    InputAdornment, makeStyles,
+import {makeStyles,
     Paper,
     Table,
     TableBody,
@@ -13,7 +10,7 @@ import {
     TableFooter,
     TableHead,
     TablePagination, TextField,
-    Toolbar, Typography
+    Toolbar
 } from "@material-ui/core";
 import axios from "axios";
 import CouponForm from "./CouponForm";
@@ -65,7 +62,11 @@ function Coupon(){
         async function fetchData() {
             const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon/all`);
 
+
             setCouponData(request.data);
+
+            console.log(couponData);
+
             return request;
         }
         fetchData();
@@ -131,12 +132,19 @@ function Coupon(){
     }
 
     const changeGameName = (event) => {
-        setGameName(event.target.value);
+        setTimeout(() => {
+            const getName = event.target.value;
+            if(getName !== "")
+                setGameName(getName);
+        }, 1000);
     }
 
     const changeGameId = (event, value) => {
-        setGameId(value.id);
+        const getId = value.id;
+        setGameId(getId);
     }
+
+    console.log(couponData);
 
     if(loading) return (<div>Loading...</div>);
     return (
