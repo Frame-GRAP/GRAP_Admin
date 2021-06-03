@@ -1,13 +1,22 @@
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Controller from "../../controls/Controller";
-import {Box, Collapse, Table, TableBody, TableHead, Typography} from "@material-ui/core";
+import {Box, Collapse, makeStyles, Table, TableBody, TableHead, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+}));
 
 export default function VideoRow(props) {
     const {index, video, page, rowsPerPage, getVideo, setConfirmDialog, onDelete, onRegister, onUnRegister, gameId} = props;
     const [more, setMore] = useState(false);
     const [registered, setRegistered] = useState("");
+    const classes = useStyles();
 
     useEffect(() => {
         if(video.registered)
@@ -28,15 +37,15 @@ export default function VideoRow(props) {
                 <TableCell>{video.uploader}</TableCell>
                 <TableCell>{video.platform}</TableCell>
                 <TableCell>{video.liked}</TableCell>
-                <TableCell>
+                <TableCell className={classes.root}>
                     <Controller.Button
                         text="more"
-                        color="primary"
+                        color="default"
                         size="small"
                         onClick={() => setMore(!more)}/>
                     <Controller.Button
                         text="Delete"
-                        color="primary"
+                        color="secondary"
                         size="small"
                         onClick={() => {
                             setConfirmDialog({
@@ -62,7 +71,7 @@ export default function VideoRow(props) {
                     ) : (
                         <Controller.Button
                             text="UnRegister"
-                            color="primary"
+                            color="secondary"
                             size="small"
                             onClick={() => {
                                 setConfirmDialog({
