@@ -95,6 +95,14 @@ function Report(){
         )
     }
 
+    async function refreshReport() {
+        setReportData([]);
+        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/report/all`);
+
+        setReportData(request.data);
+        return request;
+    }
+
     const onAccept = (reportId, type, targetId, gameId) => {
         setConfirmDialog({
             ...confirmDialog,
@@ -102,7 +110,7 @@ function Report(){
         })
 
         if(type === "video"){
-            deleteVideo(targetId, gameId);
+            deleteVideo(targetId);
         }
         else{
             deleteReview(targetId);
@@ -113,6 +121,7 @@ function Report(){
                 message: 'Deleted Successfully',
                 type: 'error'
             })
+            refreshReport();
         })
     }
 
@@ -127,6 +136,7 @@ function Report(){
                 message: 'Deleted Successfully',
                 type: 'error'
             })
+            refreshReport();
         })
     }
 

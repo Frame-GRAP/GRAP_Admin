@@ -31,7 +31,7 @@ function ReportRow(props) {
                 <TableCell>
                     <Controller.Button
                         text="more"
-                        color="primary"
+                        color="default"
                         size="small"
                         onClick={() => setMore(!more)}/>
                 </TableCell>
@@ -89,30 +89,32 @@ function ReportRow(props) {
                                             <TableCell >
                                                 {/*{getVideo(video.platform, video.urlKey)}*/}
                                             </TableCell>
-                                            <Controller.Button
-                                                text="ACCEPT"
-                                                color="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    setConfirmDialog({
-                                                        isOpen: true,
-                                                        title:'해당 댓글을 삭제하시겠습니까?',
-                                                        subTitle:"되돌릴 수 없습니다.",
-                                                        onConfirm: () => {onAccept(report.id, report.target, report.targetId)}
-                                                    })
-                                                }}/>
-                                            <Controller.Button
-                                                text="DENY"
-                                                color="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    setConfirmDialog({
-                                                        isOpen: true,
-                                                        title:'신고를 반려하시겠습니까?',
-                                                        subTitle:"되돌릴 수 없습니다.",
-                                                        onConfirm: () => {onReject(report.id)}
-                                                    })
-                                                }}/>
+                                            <TableCell className={classes.root}>
+                                                <Controller.Button
+                                                    text="ACCEPT"
+                                                    color="default"
+                                                    size="small"
+                                                    onClick={() => {
+                                                        setConfirmDialog({
+                                                            isOpen: true,
+                                                            title:'해당 댓글을 삭제하시겠습니까?',
+                                                            subTitle:"되돌릴 수 없습니다.",
+                                                            onConfirm: () => {onAccept(report.id, report.target, report.targetId)}
+                                                        })
+                                                    }}/>
+                                                <Controller.Button
+                                                    text="DENY"
+                                                    color="secondary"
+                                                    size="small"
+                                                    onClick={() => {
+                                                        setConfirmDialog({
+                                                            isOpen: true,
+                                                            title:'신고를 반려하시겠습니까?',
+                                                            subTitle:"되돌릴 수 없습니다.",
+                                                            onConfirm: () => {onReject(report.id)}
+                                                        })
+                                                    }}/>
+                                            </TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
