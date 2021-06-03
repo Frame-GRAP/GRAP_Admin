@@ -132,7 +132,7 @@ function Video(){
                 message: 'Deleted Successfully',
                 type: 'error'
             })
-            window.location.reload(false);
+            refreshVideo();
         });
     }
 
@@ -148,7 +148,7 @@ function Video(){
                 message: 'Register Successfully',
                 type: 'success'
             });
-            window.location.reload(false);
+            refreshVideo();
         })
     }
 
