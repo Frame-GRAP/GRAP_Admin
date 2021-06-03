@@ -1,13 +1,22 @@
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Controller from "../../controls/Controller";
-import {Box, Collapse, Table, TableBody, TableHead, Typography} from "@material-ui/core";
+import {Box, Collapse, makeStyles, Table, TableBody, TableHead, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+}));
 
 export default function GameRow(props) {
     const {index, game, gamePage, rowsPerPage, openInPopup, setConfirmDialog, onDelete} = props;
     const [more, setMore] = useState(false);
     const [releaseDate, setReleaseDate] = useState("");
+    const classes = useStyles();
 
     useEffect(() => {
         setReleaseDate(game.releaseDate);
@@ -20,21 +29,20 @@ export default function GameRow(props) {
                 <TableCell component="th" scope="row">
                     {gamePage * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell>{game.id}</TableCell>
                 <TableCell>{game.name}</TableCell>
                 <TableCell><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
                 <TableCell>{game.price}</TableCell>
                 <TableCell>{game.publisher}</TableCell>
                 <TableCell>{releaseDate}</TableCell>
-                <TableCell>
+                <TableCell className={classes.root}>
                     <Controller.Button
                         text="Edit"
-                        color="primary"
+                        color="default"
                         size="small"
                         onClick={() => {openInPopup(game)}}/>
                     <Controller.Button
                         text="Delete"
-                        color="primary"
+                        color="secondary"
                         size="small"
                         onClick={() => {
                             setConfirmDialog({
@@ -47,7 +55,7 @@ export default function GameRow(props) {
                     />
                     <Controller.Button
                         text="more"
-                        color="primary"
+                        color="default"
                         size="small"
                         onClick={() => setMore(!more)}/>
                 </TableCell>
