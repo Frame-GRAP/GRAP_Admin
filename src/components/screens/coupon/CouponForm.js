@@ -12,10 +12,9 @@ const initialValues = {
 }
 
 function CouponForm(props) {
-    const { addCoupon, editCoupon, recordForEdit } = props
+    const { addCoupon, editCoupon, recordForEdit, setGameId } = props
     const [gameName, setGameName] = useState("");
     const [searchResult, setSearchResult] = useState([]);
-    const [gameId, setGameId] = useState(0);
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -44,9 +43,8 @@ function CouponForm(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(values);
         if (validate()) {
-            if(!recordForEdit){
+            if(values.couponId){
                 editCoupon(values, resetForm);
             }
             else{
@@ -85,6 +83,7 @@ function CouponForm(props) {
     const changeGameId = (event, value) => {
         if(value !== null){
             const getId = value.id;
+            console.log(getId);
             setGameId(getId);
             setValues({...values, ["gameName"]: value.name});
         }

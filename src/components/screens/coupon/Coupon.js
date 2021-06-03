@@ -16,7 +16,7 @@ import axios from "axios";
 import CouponForm from "./CouponForm";
 import Controller from "../../controls/Controller";
 import Popup from "../../controls/Popup";
-import {deleteCoupon, insertCoupon, updateCoupon} from "../../Service";
+import {insertCoupon, deleteCoupon, updateCoupon} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
 import CouponRow from "./CouponRow";
@@ -45,6 +45,7 @@ function Coupon(){
 
     const [searchResult, setSearchResult] = useState([]);
     const [gameName, setGameName] = useState("");
+    const [searchGameId, setSearchGameId] = useState(0);
     const [gameId, setGameId] = useState(0);
 
     const classes = useStyles();
@@ -58,62 +59,30 @@ function Coupon(){
         setCouponPage(0);
     };
 
-    useEffect(()=> {
-        async function fetchData() {
-            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon/all`);
-
-
-            setCouponData(request.data);
-
-            console.log(couponData);
-
-            return request;
-        }
-        fetchData();
-        setLoading(false);
-        return () => {
-            setLoading(true);
-        }
-    }, [gameId]);
-
-    useEffect(() => {
-        async function fetchGameData() {
-            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
-
-            setSearchResult(request.data);
-            return request;
-        }
-
-        fetchGameData();
-    }, [gameName])
-
     const addCoupon = (data, resetForm) => {
-        console.log("edit")
-        updateCoupon(data).then(r => {
+        insertCoupon(data, gameId).then(r => {
             resetForm()
             setNotify({
                 isOpen: true,
                 message: 'Submitted Successfully',
                 type: 'success'
-            })
+            });
+            setOpenPopup(false);
+            if(searchGameId === gameId)
+                refreshCoupon();
         });
     }
 
     const editCoupon = (data, resetForm) => {
-        console.log("insert");
-        insertCoupon(data).then(r => {
-            resetForm()
+        updateCoupon(data).then(r => {
             setNotify({
                 isOpen: true,
                 message: 'Submitted Successfully',
                 type: 'success'
             })
+            setOpenPopup(false);
+            refreshCoupon();
         });
-    }
-
-    const openInPopup = (coupon) => {
-        setRecordForEdit(coupon);
-        setOpenPopup(true);
     }
 
     const onDelete = id => {
@@ -127,8 +96,46 @@ function Coupon(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            window.location.reload(false);
+            refreshCoupon();
         });
+    }
+
+    const openInPopup = (coupon) => {
+        setRecordForEdit(coupon);
+        setOpenPopup(true);
+    }
+
+    useEffect(()=> {
+        async function fetchData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${searchGameId}/coupon/all`);
+
+            setCouponData(request.data);
+            return request;
+        }
+        fetchData();
+        setLoading(false);
+        return () => {
+            setLoading(true);
+        }
+    }, [searchGameId]);
+
+    useEffect(() => {
+        setCouponData([]);
+        async function fetchGameData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
+
+            setSearchResult(request.data);
+            return request;
+        }
+
+        fetchGameData();
+    }, [gameName]);
+
+    async function refreshCoupon() {
+        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon/all`);
+        console.log(request.data);
+        setCouponData(request.data);
+        return request;
     }
 
     const changeGameName = (event) => {
@@ -140,11 +147,11 @@ function Coupon(){
     }
 
     const changeGameId = (event, value) => {
-        const getId = value.id;
-        setGameId(getId);
+        if(value !== ""){
+            const getId = value.id;
+            setSearchGameId(getId);
+        }
     }
-
-    console.log(couponData);
 
     if(loading) return (<div>Loading...</div>);
     return (
@@ -154,7 +161,6 @@ function Coupon(){
             </div>
             <div className="game_selector">
                 <Autocomplete
-                    id="combo-box-demo"
                     options={searchResult}
                     getOptionLabel={(option) => option.name}
                     style={{ width: 300 }}
@@ -176,7 +182,6 @@ function Coupon(){
                         <TableHead>
                             <TableRow>
                                 <TableCell>No</TableCell>
-                                <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
                                 <TableCell>expirationDate</TableCell>
                                 <TableCell>gameHeaderImage</TableCell>
@@ -193,7 +198,8 @@ function Coupon(){
                                         rowsPerPage={rowsPerPage}
                                         openInPopup={openInPopup}
                                         setConfirmDialog={setConfirmDialog}
-                                        onDelete={onDelete}/>
+                                        onDelete={onDelete}
+                                    />
                                 ))}
                         </TableBody>
                         <TableFooter>
@@ -218,6 +224,7 @@ function Coupon(){
                         recordForEdit={recordForEdit}
                         addCoupon={addCoupon}
                         editCoupon={editCoupon}
+                        setGameId={setGameId}
                     />
                 </Popup>
                 <Notification
