@@ -98,9 +98,9 @@ function Game(){
     }*/
 
     async function refreshGame() {
+        setGameData([]);
         const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
 
-        setRecordForEdit(request.data);
         setGameData(request.data);
         return request;
     }
@@ -114,7 +114,7 @@ function Game(){
                     message: 'Submitted Successfully',
                     type: 'success'
                 })
-                window.location.reload(false);
+                refreshGame();
             });
         }
 
@@ -128,7 +128,7 @@ function Game(){
                     type: 'success'
                 })
             });
-            window.location.reload(false);
+            refreshGame();
         }
     }
 
@@ -148,7 +148,7 @@ function Game(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            window.location.reload(false);
+            refreshGame();
         });
     }
 
@@ -182,7 +182,6 @@ function Game(){
                         <TableHead>
                             <TableRow>
                                 <TableCell>No</TableCell>
-                                <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
                                 <TableCell>image</TableCell>
                                 <TableCell>price</TableCell>
