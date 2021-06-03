@@ -95,6 +95,14 @@ function Report(){
         )
     }
 
+    async function refreshReport() {
+        setReportData([]);
+        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/report/all`);
+
+        setReportData(request.data);
+        return request;
+    }
+
     const onAccept = (reportId, type, targetId, gameId) => {
         setConfirmDialog({
             ...confirmDialog,
@@ -102,7 +110,7 @@ function Report(){
         })
 
         if(type === "video"){
-            deleteVideo(targetId, gameId);
+            deleteVideo(targetId);
         }
         else{
             deleteReview(targetId);
@@ -113,6 +121,7 @@ function Report(){
                 message: 'Deleted Successfully',
                 type: 'error'
             })
+            refreshReport();
         })
     }
 
@@ -127,6 +136,7 @@ function Report(){
                 message: 'Deleted Successfully',
                 type: 'error'
             })
+            refreshReport();
         })
     }
 
@@ -136,13 +146,6 @@ function Report(){
                 <h1>Report Info</h1>
             </div>
             <div className="report_selector">
-                {/*<Autocomplete
-                    options={reportData}
-                    getOptionLabel={(option => option.name)}
-                    style={{width: 300}}
-                    renderInput={(params) => <TextField {...params} label="Game Name" variant="outlined" />}
-                    onChange={changeGameId}
-                />*/}
                 <Tabs value={currentTab} onChange={handleSort} aria-label="simple tabs example">
                     <Tab label="All" value="All" />
                     <Tab label="Video" value="Video"/>
@@ -154,13 +157,11 @@ function Report(){
                     <TableHead>
                         <TableRow>
                             <TableCell>No</TableCell>
-                            <TableCell>id</TableCell>
                             <TableCell>username</TableCell>
                             <TableCell>reportType</TableCell>
                             <TableCell>content</TableCell>
                             <TableCell>modifiedDate</TableCell>
                             <TableCell>target</TableCell>
-                            <TableCell>targetId</TableCell>
                             <TableCell>actions</TableCell>
                         </TableRow>
                     </TableHead>
