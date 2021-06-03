@@ -1,14 +1,21 @@
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Controller from "../../controls/Controller";
-import {Box, Collapse, Table, TableBody, TableHead, Typography} from "@material-ui/core";
+import {Box, Collapse, makeStyles, Table, TableBody, TableHead, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+}));
 
 function UserRow(props) {
     const {index, user, userPage, rowsPerPage, openInPopup, setConfirmDialog, onDelete} = props;
     const [more, setMore] = useState(false);
-
-    console.log(user.nickname);
+    const classes = useStyles();
 
     return (
         <>
@@ -16,13 +23,12 @@ function UserRow(props) {
                 <TableCell component="th" scope="row">
                     {userPage * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell>{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell><img width="80px" height="80px" src={user.picture} alt="header"/></TableCell>
                 <TableCell>{user.nickname}</TableCell>
                 <TableCell>{user.membership}</TableCell>
-                <TableCell>
+                <TableCell className={classes.root}>
                     <Controller.Button
                         text="Edit"
                         color="default"
@@ -30,7 +36,7 @@ function UserRow(props) {
                         onClick={() => {openInPopup(user)}}/>
                     <Controller.Button
                         text="Delete"
-                        color="default"
+                        color="secondary"
                         size="small"
                         onClick={() => {
                             setConfirmDialog({

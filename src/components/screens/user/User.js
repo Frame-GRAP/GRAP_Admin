@@ -147,7 +147,6 @@ function User(){
                         <TableHead>
                             <TableRow>
                                 <TableCell>No</TableCell>
-                                <TableCell>id</TableCell>
                                 <TableCell>name</TableCell>
                                 <TableCell>email</TableCell>
                                 <TableCell>picture</TableCell>
