@@ -31,7 +31,6 @@ export default function VideoRow(props) {
                 <TableCell component="th" scope="row">
                     {page * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell>{video.id}</TableCell>
                 <TableCell><img width="300px" height="150px" src={video.image} alt="header"/></TableCell>
                 <TableCell>{video.title}</TableCell>
                 <TableCell>{video.uploader}</TableCell>

@@ -190,7 +190,6 @@ function Video(){
                     <TableHead>
                         <TableRow>
                             <TableCell>No</TableCell>
-                            <TableCell>id</TableCell>
                             <TableCell>image</TableCell>
                             <TableCell>title</TableCell>
                             <TableCell>uploader</TableCell>
