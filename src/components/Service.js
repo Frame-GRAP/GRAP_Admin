@@ -129,7 +129,7 @@ export async function deleteReport(reportId) {
 
 
 export async function insertCoupon(coupon, gameId) {
-    const couponInsertUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/1/coupon`;
+    const couponInsertUrl = `http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon`;
 
     const dto = new Object();
     dto.name = coupon.name;
