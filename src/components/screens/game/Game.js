@@ -114,6 +114,8 @@ function Game(){
                     message: 'Submitted Successfully',
                     type: 'success'
                 })
+                setOpenPopup(false);
+                searchRef.current = "";
                 refreshGame();
             });
         }
@@ -127,8 +129,10 @@ function Game(){
                     message: 'Submitted Successfully',
                     type: 'success'
                 })
+                setOpenPopup(false);
+                searchRef.current = "";
+                refreshGame();
             });
-            refreshGame();
         }
     }
 
@@ -148,6 +152,7 @@ function Game(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
+            setOpenPopup(false);
             refreshGame();
         });
     }

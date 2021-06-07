@@ -65,6 +65,7 @@ function Report(){
         async function fetchData() {
             const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/report/all");
 
+
             setReportData(request.data);
             return request;
         }
@@ -76,23 +77,10 @@ function Report(){
         }
     }, []);
 
-    const getVideo = (platform, urlKey) => {
-        let player_Url = "";
-        if(platform === "twitch"){
-            player_Url = `https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost&autoplay=true&origin=http://localhost:3000`
-        }else if(platform === "youtube"){
-            player_Url = `https://www.youtube.com/embed/${urlKey}?autoplay=1&mute=0`
-        }
 
-        return (
-            <iframe
-                className="row_video"
-                width="400px" height="300px"
-                src={player_Url}
-                scrolling="no"
-                frameBorder="0"
-                allow="autoplay"/>
-        )
+
+    const getReview = (targetId) => {
+
     }
 
     async function refreshReport() {
@@ -174,7 +162,7 @@ function Report(){
                                     report={report}
                                     page={page}
                                     rowsPerPage={rowsPerPage}
-                                    getVideo={getVideo}
+                                    getReview={getReview}
                                     setConfirmDialog={setConfirmDialog}
                                     onAccept={onAccept}
                                     onReject={onReject}
