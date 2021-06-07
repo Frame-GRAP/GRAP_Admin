@@ -8,6 +8,7 @@ function Main() {
     const [videoCount, setVideoCount] = useState(0);
     const [userCount, setUserCount] = useState(0);
     const [reportCount, setReportCount] = useState(0);
+    const [couponCount, setCouponCount] = useState(0);
     const [gameId, setGameId] = useState([]);
     const history = useHistory();
 
@@ -24,6 +25,9 @@ function Main() {
             })
             axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/report/countAll").then((res) => {
                 setReportCount(res.data);
+            })
+            axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/coupon/countAll").then((res) => {
+                setCouponCount(res.data);
             })
         }
 
@@ -62,7 +66,7 @@ function Main() {
                     <i className="fa fa-money fa-2x text-red"></i>
                     <div className="card_inner">
                         <p className="text-primary-p">Number of Coupons</p>
-                        <span className="font-bold text-title">5890</span>
+                        <span className="font-bold text-title">{couponCount}</span>
                     </div>
                 </div>
                 <div className="card" onClick={() => history.push("/report")}>
