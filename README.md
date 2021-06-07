@@ -61,7 +61,7 @@ npm start
 
 ### 4. 쿠폰 관리
 
-<img src="./src/img/readmeImg/userManagement.png" width="500">
+<img src="./src/img/readmeImg/couponManagement.png" width="500">
 
 + 쿠폰 발급 및 수정 삭제 가능
 
