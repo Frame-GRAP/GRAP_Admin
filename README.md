@@ -1,5 +1,7 @@
 # GRAP_Admin
-
+- [GRAP_FrontEnd](https://github.com/Frame-GRAP/GRAP_FrontEnd)  
+- [GRAP BackEnd](https://github.com/Frame-GRAP/GRAP_BackEnd)  
+- [GRAP_RecommendationSystem](https://github.com/Frame-GRAP/GRAP_RecommendationSystem)
 ----------------------------------------------------------------
 ## 목차
 [1. 개요](#1-개요)  
@@ -71,6 +73,9 @@ npm start
 <img src="./src/img/readmeImg/reportManagement.png" width="500">
 
 + 신고 내용 확인 및 처리
+
+이 외 유저 기능은 아래 레포지토리에 소개되어 있습니다.  
+[GRAP_FrontEnd](https://github.com/Frame-GRAP/GRAP_FrontEnd)  
 
 
 
