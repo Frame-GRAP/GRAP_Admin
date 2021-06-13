@@ -147,7 +147,7 @@ function Coupon(){
     }
 
     const changeGameId = (event, value) => {
-        if(value !== ""){
+        if(value !== null){
             const getId = value.id;
             setSearchGameId(getId);
         }
