@@ -25,16 +25,16 @@ export default function GameRow(props) {
 
     return (
         <>
-            <TableRow key={index}>
-                <TableCell component="th" scope="row">
-                    {gamePage * rowsPerPage + index + 1}
-                </TableCell>
-                <TableCell>{game.name}</TableCell>
-                <TableCell><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
-                <TableCell>{game.price}</TableCell>
-                <TableCell>{game.publisher}</TableCell>
-                <TableCell>{releaseDate}</TableCell>
-                <TableCell className={classes.root}>
+            <TableRow>
+                {/*<TableCell component="th" scope="row">
+                    {gamePage * rowsPerPage + 1}
+                </TableCell>*/}
+                <TableCell align="center">{game.name}</TableCell>
+                <TableCell align="center"><img width="200px" height="100px" src={game.headerImg} alt="header"/></TableCell>
+                <TableCell align="center">{game.price}</TableCell>
+                <TableCell align="center">{game.publisher}</TableCell>
+                <TableCell align="center">{releaseDate}</TableCell>
+                <TableCell align="center"className={classes.root}>
                     <Controller.Button
                         text="Edit"
                         color="default"
@@ -52,17 +52,17 @@ export default function GameRow(props) {
                                 onConfirm: () => {onDelete(game.id)}
                             })
                         }}
-                    />
+                    />{/*
                     <Controller.Button
                         text="more"
                         color="default"
                         size="small"
-                        onClick={() => setMore(!more)}/>
+                        onClick={() => setMore(!more)}/>*/}
                 </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={more} timeout="auto" unmountOnExit>
+                    {/*<Collapse in={more} timeout="auto" unmountOnExit>*/}
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
                                 More Info
@@ -70,23 +70,23 @@ export default function GameRow(props) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>description</TableCell>
-                                        <TableCell>lastVideoCrawled</TableCell>
-                                        <TableCell>downloadUrl</TableCell>
-                                        <TableCell>VoteCount</TableCell>
+                                        <TableCell align="center">description</TableCell>
+                                        <TableCell align="center">lastVideoCrawled</TableCell>
+                                        <TableCell align="center">downloadUrl</TableCell>
+                                        <TableCell align="center">VoteCount</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell>{game.description}</TableCell>
-                                        <TableCell>{game.lastVideoCrawled}</TableCell>
-                                        <TableCell>{game.downloadUrl}</TableCell>
-                                        <TableCell>{game.vote_count}</TableCell>
+                                        <TableCell align="center">{game.description}</TableCell>
+                                        <TableCell align="center">{game.lastVideoCrawled}</TableCell>
+                                        <TableCell align="center">{game.downloadUrl}</TableCell>
+                                        <TableCell align="center">{game.vote_count}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </Box>
-                    </Collapse>
+                    {/*</Collapse>*/}
                 </TableCell>
             </TableRow>
         </>
