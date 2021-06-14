@@ -17,6 +17,7 @@ function ReportRow(props) {
     const {index, report, page, rowsPerPage, getReview, setConfirmDialog, onAccept, onReject} = props;
     const [more, setMore] = useState(false);
     const [playerUrl, setPlayerUrl] = useState("");
+    const [content, setContent] = useState("");
     const [targetId, setTargetId] = useState("");
     const classes = useStyles();
 
@@ -26,17 +27,26 @@ function ReportRow(props) {
 
 
     useEffect(() => {
-        axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/video/${targetId}`)
-            .then((res) =>{
-                const urlKey = res.data.urlKey;
-                const platform = res.data.platform;
+        if(report.target === "video"){
+            axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/video/${targetId}`)
+                .then((res) =>{
+                    const urlKey = res.data.urlKey;
+                    const platform = res.data.platform;
 
-                if(platform === "twitch"){
-                    setPlayerUrl(`https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost&autoplay=true&origin=http://localhost:3000`);
-                }else if(platform === "youtube"){
-                    setPlayerUrl(`https://www.youtube.com/embed/${urlKey}?autoplay=1&mute=0`);
-                }
-            })
+                    if(platform === "twitch"){
+                        setPlayerUrl(`https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost&autoplay=true&origin=http://localhost:3000`);
+                    }else if(platform === "youtube"){
+                        setPlayerUrl(`https://www.youtube.com/embed/${urlKey}?autoplay=1&mute=0`);
+                    }
+                })
+        }
+        else{
+            axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/review/${targetId}`)
+                .then((res) =>{
+                    setContent(res.data.content);
+                })
+        }
+
     }, [more]);
 
 
@@ -44,15 +54,15 @@ function ReportRow(props) {
     return (
         <>
             <TableRow key={index}>
-                <TableCell component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                     {page * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell>{report.username}</TableCell>
-                <TableCell>{report.reportType}</TableCell>
-                <TableCell>{report.content}</TableCell>
-                <TableCell>{report.modifiedDate}</TableCell>
-                <TableCell>{report.target}</TableCell>
-                <TableCell>
+                <TableCell align="center">{report.username}</TableCell>
+                <TableCell align="center">{report.reportType}</TableCell>
+                <TableCell align="center">{report.content}</TableCell>
+                <TableCell align="center">{report.modifiedDate}</TableCell>
+                <TableCell align="center">{report.target}</TableCell>
+                <TableCell align="center">
                     <Controller.Button
                         text="more"
                         color="default"
@@ -70,14 +80,14 @@ function ReportRow(props) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>target</TableCell>
-                                        <TableCell>actions</TableCell>
+                                        <TableCell align="center">target</TableCell>
+                                        <TableCell align="center">actions</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {report.target === "video" ? (
                                         <TableRow style={{ height: "300px" }}>
-                                            <TableCell >
+                                            <TableCell align="center">
                                                 {playerUrl !== "" &&
                                                 <iframe
                                                     className="row_video"
@@ -88,7 +98,7 @@ function ReportRow(props) {
                                                     allow="autoplay"
                                                 />}
                                             </TableCell >
-                                            <TableCell className={classes.root}>
+                                            <TableCell align="center" className={classes.root}>
                                                 <Controller.Button
                                                     text="ACCEPT"
                                                     color="default"
@@ -118,10 +128,10 @@ function ReportRow(props) {
                                         </TableRow>
                                     ) : (
                                         <TableRow style={{ height: "100px" }}>
-                                            <TableCell >
-                                                {}
+                                            <TableCell align="center">
+                                                {content}
                                             </TableCell>
-                                            <TableCell className={classes.root}>
+                                            <TableCell align="center" className={classes.root}>
                                                 <Controller.Button
                                                     text="ACCEPT"
                                                     color="default"
