@@ -61,7 +61,7 @@ function Coupon(){
 
     const addCoupon = (data, resetForm) => {
         insertCoupon(data, gameId).then(r => {
-            resetForm()
+            resetForm();
             setNotify({
                 isOpen: true,
                 message: 'Submitted Successfully',
@@ -75,6 +75,7 @@ function Coupon(){
 
     const editCoupon = (data, resetForm) => {
         updateCoupon(data).then(r => {
+            resetForm();
             setNotify({
                 isOpen: true,
                 message: 'Submitted Successfully',
@@ -85,7 +86,7 @@ function Coupon(){
         });
     }
 
-    const onDelete = id => {
+    const onDelete = (id, index) => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
@@ -96,7 +97,11 @@ function Coupon(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            refreshCoupon();
+            const temp = [...couponData];
+
+            temp.splice(index, 1);
+
+            setCouponData(temp);
         });
     }
 
