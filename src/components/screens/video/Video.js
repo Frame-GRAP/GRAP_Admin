@@ -189,13 +189,13 @@ function Video(){
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>No</TableCell>
-                            <TableCell>image</TableCell>
-                            <TableCell>title</TableCell>
-                            <TableCell>uploader</TableCell>
-                            <TableCell>platform</TableCell>
-                            <TableCell>liked</TableCell>
-                            <TableCell>actions</TableCell>
+                            <TableCell align="center">No</TableCell>
+                            <TableCell align="center">image</TableCell>
+                            <TableCell align="center">title</TableCell>
+                            <TableCell align="center">uploader</TableCell>
+                            <TableCell align="center">platform</TableCell>
+                            <TableCell align="center">liked</TableCell>
+                            <TableCell align="center">actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

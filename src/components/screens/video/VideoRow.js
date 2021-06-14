@@ -28,15 +28,15 @@ export default function VideoRow(props) {
     return (
         <>
             <TableRow key={index}>
-                <TableCell component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                     {page * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell><img width="300px" height="150px" src={video.image} alt="header"/></TableCell>
-                <TableCell>{video.title}</TableCell>
-                <TableCell>{video.uploader}</TableCell>
-                <TableCell>{video.platform}</TableCell>
-                <TableCell>{video.liked}</TableCell>
-                <TableCell className={classes.root}>
+                <TableCell align="center"><img width="300px" height="150px" src={video.image} alt="header"/></TableCell>
+                <TableCell align="center">{video.title}</TableCell>
+                <TableCell align="center">{video.uploader}</TableCell>
+                <TableCell align="center">{video.platform}</TableCell>
+                <TableCell align="center">{video.liked}</TableCell>
+                <TableCell align="center" className={classes.root}>
                     <Controller.Button
                         text="more"
                         color="default"
@@ -85,7 +85,7 @@ export default function VideoRow(props) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell align="center" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={more} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
@@ -94,12 +94,12 @@ export default function VideoRow(props) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>video</TableCell>
+                                        <TableCell align="center">video</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow style={{ height: "300px" }}>
-                                        <TableCell >
+                                        <TableCell align="center">
                                             {getVideo(video.platform, video.urlKey)}
                                         </TableCell>
                                     </TableRow>
