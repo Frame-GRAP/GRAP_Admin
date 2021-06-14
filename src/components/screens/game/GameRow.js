@@ -52,17 +52,17 @@ export default function GameRow(props) {
                                 onConfirm: () => {onDelete(game.id)}
                             })
                         }}
-                    />{/*
+                    />
                     <Controller.Button
                         text="more"
                         color="default"
                         size="small"
-                        onClick={() => setMore(!more)}/>*/}
+                        onClick={() => setMore(!more)}/>
                 </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    {/*<Collapse in={more} timeout="auto" unmountOnExit>*/}
+                    <Collapse in={more} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
                                 More Info
@@ -73,7 +73,7 @@ export default function GameRow(props) {
                                         <TableCell align="center">description</TableCell>
                                         <TableCell align="center">lastVideoCrawled</TableCell>
                                         <TableCell align="center">downloadUrl</TableCell>
-                                        <TableCell align="center">VoteCount</TableCell>
+                                        {/*<TableCell align="center">VoteCount</TableCell>*/}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -81,12 +81,12 @@ export default function GameRow(props) {
                                         <TableCell align="center">{game.description}</TableCell>
                                         <TableCell align="center">{game.lastVideoCrawled}</TableCell>
                                         <TableCell align="center">{game.downloadUrl}</TableCell>
-                                        <TableCell align="center">{game.vote_count}</TableCell>
+                                        {/*<TableCell align="center">{game.voteCount}</TableCell>*/}
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </Box>
-                    {/*</Collapse>*/}
+                    </Collapse>
                 </TableCell>
             </TableRow>
         </>

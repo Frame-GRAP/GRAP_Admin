@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
         top: theme.spacing(5)
     },
     dialogTitle:{
-        paddingRight: '0px',
+        padding: theme.spacing(1),
     }
 }))
 
