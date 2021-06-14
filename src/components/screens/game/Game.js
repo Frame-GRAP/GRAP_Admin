@@ -12,7 +12,7 @@ import {
     TableContainer,
     TableFooter,
     TableHead,
-    TablePagination,
+    TablePagination, TextField,
     Toolbar, Typography
 } from "@material-ui/core";
 import axios from "axios";
@@ -23,6 +23,7 @@ import {deleteGame, insertGame, updateGame} from "../../Service";
 import Notification from "../../controls/Notification";
 import ConfirmDialog from "../../controls/ConfirmDialog";
 import GameRow from "./GameRow";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles(theme => ({
     searchInput:{
@@ -49,6 +50,10 @@ function Game(){
     const searchRef = useRef();
     const [loading, setLoading] = useState(true);
 
+    const [searchResult, setSearchResult] = useState([]);
+    const [gameName, setGameName] = useState("");
+    const [searchGameId, setSearchGameId] = useState(0);
+
     const classes = useStyles();
 
     const handleChangePage = (event, newPage) => {
@@ -62,6 +67,32 @@ function Game(){
 
     useEffect(()=> {
         async function fetchData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${searchGameId}`);
+
+            setGameData(request.data);
+            return request;
+        }
+        fetchData();
+        setLoading(false);
+        return () => {
+            setLoading(true);
+        }
+    }, [searchGameId]);
+
+    useEffect(() => {
+        setGameData([]);
+        async function fetchGameData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
+
+            setSearchResult(request.data);
+            return request;
+        }
+
+        fetchGameData();
+    }, [gameName]);
+
+    /*useEffect(()=> {
+        async function fetchData() {
             const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
 
             setGameData(request.data);
@@ -72,7 +103,7 @@ function Game(){
         return () => {
             setLoading(true);
         }
-    }, []);
+    }, []);*/
 
     const handleSearch = e => {
         let target = e.target;
@@ -86,9 +117,9 @@ function Game(){
         })
     }
 
-    const recordsAfterPagingAndSorting = () => {
+    /*const recordsAfterPagingAndSorting = () => {
         return filterFn.fn(gameData).slice(gamePage * rowsPerPage, (gamePage + 1) * rowsPerPage);
-    }
+    }*/
 
     /*const addOrEdit = (game, resetForm) => {
         insertGame(game);
@@ -99,36 +130,37 @@ function Game(){
 
     async function refreshGame() {
         setGameData([]);
-        const request = await axios.get("http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/all");
+        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game?name=${gameName}`);
 
-        setGameData(request.data);
+        setSearchResult(request.data);
         return request;
     }
 
     const addOrEdit = (data, resetForm) => {
         if(data.img == undefined){//edit
             updateGame(data).then(r => {
-                resetForm()
+                resetForm();
                 setNotify({
                     isOpen: true,
                     message: 'Submitted Successfully',
                     type: 'success'
                 })
-                refreshGame();
+                setOpenPopup(false);
+                setGameData(data);
             });
         }
 
         else { //insert
             console.log("insert");
             insertGame(data).then(r => {
-                resetForm()
+                resetForm();
                 setNotify({
                     isOpen: true,
                     message: 'Submitted Successfully',
                     type: 'success'
                 })
+                setOpenPopup(false);
             });
-            refreshGame();
         }
     }
 
@@ -148,8 +180,24 @@ function Game(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            refreshGame();
+            setOpenPopup(false);
+            setGameData([]);
         });
+    }
+
+    const changeGameName = (event) => {
+        setTimeout(() => {
+            const getName = event.target.value;
+            if(getName !== "")
+                setGameName(getName);
+        }, 1000);
+    }
+
+    const changeGameId = (event, value) => {
+        if(value !== null){
+            const getId = value.id;
+            setSearchGameId(getId);
+        }
     }
 
     if(loading) return (<div>Loading...</div>);
@@ -160,7 +208,14 @@ function Game(){
             </div>
             <div className="game_table" >
                 <Toolbar>
-                    <Controller.Input
+                    <Autocomplete
+                        options={searchResult}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} inputRef={searchRef} label="Game Name" variant="outlined" onChange={changeGameName}/>}
+                        onChange={changeGameId}
+                    />
+                    {/*<Controller.Input
                         className={classes.searchInput}
                         label="Search Game"
                         InputProps= {{
@@ -169,7 +224,7 @@ function Game(){
                         }}
                         onChange={handleSearch}
                         inputRef={searchRef}
-                    />
+                    />*/}
                     <Controller.Button
                         className={classes.newButton}
                         text="Add New"
@@ -181,30 +236,28 @@ function Game(){
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>No</TableCell>
-                                <TableCell>name</TableCell>
-                                <TableCell>image</TableCell>
-                                <TableCell>price</TableCell>
-                                <TableCell>publisher</TableCell>
-                                <TableCell>releaseDate</TableCell>
-                                <TableCell>actions</TableCell>
+                                {/*<TableCell align="center">No</TableCell>*/}
+                                <TableCell align="center">name</TableCell>
+                                <TableCell align="center">image</TableCell>
+                                <TableCell align="center">price</TableCell>
+                                <TableCell align="center">publisher</TableCell>
+                                <TableCell align="center">releaseDate</TableCell>
+                                <TableCell align="center">actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {recordsAfterPagingAndSorting()
-                                .map((game, index) => (
-                                    <GameRow
-                                        key={index}
-                                        index={index}
-                                        game={game}
-                                        gamePage={gamePage}
-                                        rowsPerPage={rowsPerPage}
-                                        openInPopup={openInPopup}
-                                        setConfirmDialog={setConfirmDialog}
-                                        onDelete={onDelete}/>
-                                ))}
+                            {/*{gameData.map((game, index) => (*/}
+                            {gameData.id !== undefined && <GameRow
+                                game={gameData}
+                                gamePage={gamePage}
+                                rowsPerPage={rowsPerPage}
+                                openInPopup={openInPopup}
+                                setConfirmDialog={setConfirmDialog}
+                                onDelete={onDelete}/>}
+
+                                {/*))}*/}
                         </TableBody>
-                        <TableFooter>
+                        {/*<TableFooter>
                             <TableRow>
                                 <TablePagination
                                     count={gameData.length}
@@ -214,7 +267,7 @@ function Game(){
                                     onChangeRowsPerPage={handleChangeRowsPerPage}
                                 />
                             </TableRow>
-                        </TableFooter>
+                        </TableFooter>*/}
                     </Table>
                 </TableContainer>
                 <Popup

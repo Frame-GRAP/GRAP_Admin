@@ -3,6 +3,7 @@ import TableCell from "@material-ui/core/TableCell";
 import Controller from "../../controls/Controller";
 import {Box, Collapse, makeStyles, Table, TableBody, TableHead, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,9 +14,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ReportRow(props) {
-    const {index, report, page, rowsPerPage, getVideo, setConfirmDialog, onAccept, onReject} = props;
+    const {index, report, page, rowsPerPage, getReview, setConfirmDialog, onAccept, onReject} = props;
     const [more, setMore] = useState(false);
+    const [playerUrl, setPlayerUrl] = useState("");
+    const [targetId, setTargetId] = useState("");
     const classes = useStyles();
+
+    useEffect(()=>{
+        setTargetId(report.targetId);
+    }, []);
+
+
+    useEffect(() => {
+        axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/video/${targetId}`)
+            .then((res) =>{
+                const urlKey = res.data.urlKey;
+                const platform = res.data.platform;
+
+                if(platform === "twitch"){
+                    setPlayerUrl(`https://clips.twitch.tv/embed?clip=${urlKey}&parent=localhost&autoplay=true&origin=http://localhost:3000`);
+                }else if(platform === "youtube"){
+                    setPlayerUrl(`https://www.youtube.com/embed/${urlKey}?autoplay=1&mute=0`);
+                }
+            })
+    }, [more]);
+
+
 
     return (
         <>
@@ -54,7 +78,15 @@ function ReportRow(props) {
                                     {report.target === "video" ? (
                                         <TableRow style={{ height: "300px" }}>
                                             <TableCell >
-                                                {/*{getVideo(video.platform, video.urlKey)}*/}
+                                                {playerUrl !== "" &&
+                                                <iframe
+                                                    className="row_video"
+                                                    width="400px" height="300px"
+                                                    src={playerUrl}
+                                                    scrolling="no"
+                                                    frameBorder="0"
+                                                    allow="autoplay"
+                                                />}
                                             </TableCell >
                                             <TableCell className={classes.root}>
                                                 <Controller.Button
@@ -87,7 +119,7 @@ function ReportRow(props) {
                                     ) : (
                                         <TableRow style={{ height: "100px" }}>
                                             <TableCell >
-                                                {/*{getVideo(video.platform, video.urlKey)}*/}
+                                                {}
                                             </TableCell>
                                             <TableCell className={classes.root}>
                                                 <Controller.Button

@@ -49,7 +49,7 @@ export default function CouponRow(props) {
                                 isOpen: true,
                                 title:'정말 지우시겠습니까?',
                                 subTitle:"되돌릴 수 없습니다.",
-                                onConfirm: () => {onDelete(coupon.couponId)}
+                                onConfirm: () => {onDelete(coupon.couponId, index)}
                             })
                         }}
                     />
