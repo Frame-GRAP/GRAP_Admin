@@ -119,11 +119,7 @@ function User(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            const temp = [...userData];
-
-            temp.splice(index, 1);
-
-            setUserData(temp);
+            window.location.reload(false);
         });
     }
 
