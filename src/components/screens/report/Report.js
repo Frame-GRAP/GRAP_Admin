@@ -34,8 +34,8 @@ function Report(){
                     return video;
                 else if(value == "Video")
                     return video.filter(x => x.target == "video")
-                else if(value == "Comment")
-                    return video.filter(x => x.target == "comment")
+                else if(value == "Review")
+                    return video.filter(x => x.target == "review")
             }
         })
     }
@@ -137,7 +137,7 @@ function Report(){
                 <Tabs value={currentTab} onChange={handleSort} aria-label="simple tabs example">
                     <Tab label="All" value="All" />
                     <Tab label="Video" value="Video"/>
-                    <Tab label="Comment" value="Comment"/>
+                    <Tab label="Review" value="Review"/>
                 </Tabs>
             </div>
             <TableContainer>
