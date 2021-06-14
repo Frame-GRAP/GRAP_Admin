@@ -20,20 +20,20 @@ function UserRow(props) {
     return (
         <>
             <TableRow key={index}>
-                <TableCell component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                     {userPage * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell><img width="80px" height="80px" src={user.picture} alt="header"/></TableCell>
-                <TableCell>{user.nickname}</TableCell>
-                <TableCell>{user.membership}</TableCell>
-                <TableCell className={classes.root}>
-                    <Controller.Button
+                <TableCell align="center">{user.name}</TableCell>
+                <TableCell align="center">{user.email}</TableCell>
+                <TableCell align="center"><img width="80px" height="80px" src={user.picture} alt="header"/></TableCell>
+                <TableCell align="center">{user.nickname}</TableCell>
+                <TableCell align="center">{user.membership ? (user.membership) : ("None")}</TableCell>
+                <TableCell className={classes.root} align="center">
+                    {/*<Controller.Button
                         text="Edit"
                         color="default"
                         size="small"
-                        onClick={() => {openInPopup(user)}}/>
+                        onClick={() => {openInPopup(user)}}/>*/}
                     <Controller.Button
                         text="Delete"
                         color="secondary"
@@ -43,7 +43,7 @@ function UserRow(props) {
                                 isOpen: true,
                                 title:'정말 지우시겠습니까?',
                                 subTitle:"되돌릴 수 없습니다.",
-                                onConfirm: () => {onDelete(user.id)}
+                                onConfirm: () => {onDelete(user.id, index)}
                             })
                         }}
                     />
