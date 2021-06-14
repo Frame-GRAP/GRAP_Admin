@@ -144,13 +144,13 @@ function Report(){
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>No</TableCell>
-                            <TableCell>username</TableCell>
-                            <TableCell>reportType</TableCell>
-                            <TableCell>content</TableCell>
-                            <TableCell>modifiedDate</TableCell>
-                            <TableCell>target</TableCell>
-                            <TableCell>actions</TableCell>
+                            <TableCell align="center">No</TableCell>
+                            <TableCell align="center">username</TableCell>
+                            <TableCell align="center">reportType</TableCell>
+                            <TableCell align="center">content</TableCell>
+                            <TableCell align="center">modifiedDate</TableCell>
+                            <TableCell align="center">target</TableCell>
+                            <TableCell align="center">actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
