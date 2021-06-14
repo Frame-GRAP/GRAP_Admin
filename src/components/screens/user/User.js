@@ -108,7 +108,7 @@ function User(){
         setOpenPopup(true);
     }
 
-    const onDelete = userId => {
+    const onDelete = (userId, index) => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
@@ -119,7 +119,11 @@ function User(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            window.location.reload(false);
+            const temp = [...userData];
+
+            temp.splice(index, 1);
+
+            setUserData(temp);
         });
     }
 
@@ -146,12 +150,13 @@ function User(){
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>No</TableCell>
-                                <TableCell>name</TableCell>
-                                <TableCell>email</TableCell>
-                                <TableCell>picture</TableCell>
-                                <TableCell>nickname</TableCell>
-                                <TableCell>actions</TableCell>
+                                <TableCell align="center">No</TableCell>
+                                <TableCell align="center">name</TableCell>
+                                <TableCell align="center">email</TableCell>
+                                <TableCell align="center">picture</TableCell>
+                                <TableCell align="center">nickname</TableCell>
+                                <TableCell align="center">membership</TableCell>
+                                <TableCell align="center">actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
