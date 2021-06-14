@@ -42,6 +42,7 @@ function Coupon(){
     const [notify, setNotify] = useState({isOpen:false, message:'', type:''})
     const [confirmDialog, setConfirmDialog] = useState({isOpen:false, title:'', subTitle:''})
     const [loading, setLoading] = useState(true);
+    const [changed, setChanged] =useState(true);
 
     const [searchResult, setSearchResult] = useState([]);
     const [gameName, setGameName] = useState("");
@@ -69,9 +70,10 @@ function Coupon(){
             });
             setOpenPopup(false);
             if(searchGameId === gameId)
-                refreshCoupon();
+                setChanged((prev) => !prev);
         });
     }
+
 
     const editCoupon = (data, resetForm) => {
         updateCoupon(data).then(r => {
@@ -82,7 +84,7 @@ function Coupon(){
                 type: 'success'
             })
             setOpenPopup(false);
-            refreshCoupon();
+            setChanged((prev) => !prev);
         });
     }
 
@@ -97,11 +99,7 @@ function Coupon(){
                 message: 'Deleted Successfully',
                 type: 'error'
             });
-            const temp = [...couponData];
-
-            temp.splice(index, 1);
-
-            setCouponData(temp);
+            setChanged((prev) => !prev);
         });
     }
 
@@ -111,6 +109,7 @@ function Coupon(){
     }
 
     useEffect(()=> {
+        console.log(searchGameId);
         async function fetchData() {
             const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${searchGameId}/coupon/all`);
 
@@ -136,14 +135,8 @@ function Coupon(){
         fetchGameData();
     }, [gameName]);
 
-    async function refreshCoupon() {
-        const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${gameId}/coupon/all`);
-        console.log(request.data);
-        setCouponData(request.data);
-        return request;
-    }
-
     const changeGameName = (event) => {
+        console.log(event.target.value);
         setTimeout(() => {
             const getName = event.target.value;
             if(getName !== "")
@@ -157,6 +150,21 @@ function Coupon(){
             setSearchGameId(getId);
         }
     }
+
+    useEffect(() => {
+        setCouponData([]);
+        async function fetchData() {
+            const request = await axios.get(`http://ec2-3-35-250-221.ap-northeast-2.compute.amazonaws.com:8080/api/game/${searchGameId}/coupon/all`);
+
+            setCouponData(request.data);
+            return request;
+        }
+        fetchData();
+        setLoading(false);
+        return () => {
+            setLoading(true);
+        }
+    }, [changed]);
 
     if(loading) return (<div>Loading...</div>);
     return (
@@ -191,6 +199,7 @@ function Coupon(){
                                 <TableCell>expirationDate</TableCell>
                                 <TableCell>gameHeaderImage</TableCell>
                                 <TableCell>gameName</TableCell>
+                                <TableCell>actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

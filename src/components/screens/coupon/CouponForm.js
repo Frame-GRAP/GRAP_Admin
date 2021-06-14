@@ -83,7 +83,6 @@ function CouponForm(props) {
     const changeGameId = (event, value) => {
         if(value !== null){
             const getId = value.id;
-            console.log(getId);
             setGameId(getId);
             setValues({...values, ["gameName"]: value.name});
         }
